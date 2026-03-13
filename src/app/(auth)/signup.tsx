@@ -16,7 +16,20 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClientSingleton } from '@/lib/supabase/client'
-import { colleges, departments, programmes, levels, type Role } from '@/lib/academic-data'
+import { colleges, departments, programmes, levels, type Role, type Department, type Programme } from '@/lib/academic-data'
+
+type FormErrors = {
+  fullName?: string
+  email?: string
+  password?: string
+  confirmPassword?: string
+  role?: string
+  college?: string
+  department?: string
+  programme?: string
+  level?: string
+  general?: string
+}
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
@@ -31,9 +44,10 @@ export default function SignupPage() {
   const [programme, setProgramme] = useState('')
   const [level, setLevel] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<FormErrors>({})
 
-  const availableDepartments = college ? departments[college] || []
-  const availableProgrammes = department ? programmes[department] || []
+  const availableDepartments: Department[] = college ? departments[college] || [] : [];
+  const availableProgrammes: Programme[] = department ? programmes[department] || [] : [];
 
   const handleCollegeChange = (value: string) => {
     setCollege(value)
@@ -164,6 +178,7 @@ export default function SignupPage() {
                   )
                 })}
               </div>
+            </div>
 
             <div className="space-y-4">
               <Label>College</Label>
@@ -249,7 +264,6 @@ export default function SignupPage() {
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
           </Button>
-        </CardContent>
         </form>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
