@@ -16,20 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClientSingleton } from '@/lib/supabase/client'
-import { colleges, departments, programmes, levels, type Role, type Department, type Programme } from '@/lib/academic-data'
-
-type FormErrors = {
-  fullName?: string
-  email?: string
-  password?: string
-  confirmPassword?: string
-  role?: string
-  college?: string
-  department?: string
-  programme?: string
-  level?: string
-  general?: string
-}
+import { colleges, departments, programmes, levels, type Role } from '@/lib/academic-data'
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
@@ -44,10 +31,9 @@ export default function SignupPage() {
   const [programme, setProgramme] = useState('')
   const [level, setLevel] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<FormErrors>({})
 
-  const availableDepartments: Department[] = college ? departments[college] || [] : [];
-  const availableProgrammes: Programme[] = department ? programmes[department] || [] : [];
+  const availableDepartments = college ? departments[college] || []
+  const availableProgrammes = department ? programmes[department] || []
 
   const handleCollegeChange = (value: string) => {
     setCollege(value)
@@ -60,100 +46,6 @@ export default function SignupPage() {
     setProgramme('')
   }
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-
-    if (!fullName.trim()) {
-      newErrors.fullName = 'Full name is required'
-    }
-
-    if (!email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please enter a valid email'
-    }
-
-    if (!password) {
-      newErrors.password = 'Password is required'
-    } else if (password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters'
-    }
-
-    if (!confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password'
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
-    }
-
-    if (!role) {
-      newErrors.role = 'Please select a role'
-    }
-
-    if (!college) {
-      newErrors.college = 'Please select a college'
-    }
-
-    if (!department) {
-      newErrors.department = 'Please select a department'
-    }
-
-    if (role !== 'lecturer') {
-      if (!programme) {
-        newErrors.programme = 'Please select a programme'
-      }
-      if (!level) {
-        newErrors.level = 'Please select a level'
-      }
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!validateForm()) {
-      return
-    }
-
-    setIsLoading(true)
-
-    try {
-      const supabase = createClientSingleton()
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            role: role,
-            college,
-            department,
-            programme,
-            level,
-          },
-        },
-      })
-
-      if (error) {
-        setErrors({ general: error.message })
-      } else {
-        window.location.href = '/dashboard'
-      }
-    } catch (err) {
-      setErrors({ general: 'An unexpected error occurred' })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const roleOptions = [
-    { id: 'student' as Role, label: 'Student', icon: GraduationCap },
-    { id: 'lecturer' as Role, label: 'Lecturer', icon: BookOpen },
-    { id: 'classrep' as Role, label: 'Class Rep', icon: Users },
-  ]
-
   return (
     <main className="min-h-screen flex items-center justify-center bg-background">
       <Card className="w-full max-w-lg">
@@ -163,14 +55,8 @@ export default function SignupPage() {
             Join Scholr to access academic resources
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => { e.preventDefault() }}>
           <CardContent className="space-y-6">
-            {errors.general && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-                {errors.general}
-              </div>
-            )}
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name</Label>
@@ -183,9 +69,6 @@ export default function SignupPage() {
                   required
                   disabled={isLoading}
                 />
-                {errors.fullName && (
-                  <p className="text-destructive text-sm mt-1">{errors.fullName}</p>
-                )}
               </div>
 
               <div className="space-y-2">
@@ -199,9 +82,6 @@ export default function SignupPage() {
                   required
                   disabled={isLoading}
                 />
-                {errors.email && (
-                  <p className="text-destructive text-sm mt-1">{errors.email}</p>
-                )}
               </div>
             </div>
 
@@ -227,9 +107,6 @@ export default function SignupPage() {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-destructive text-sm mt-1">{errors.password}</p>
-              )}
             </div>
 
             <div className="space-y-2">
@@ -254,9 +131,6 @@ export default function SignupPage() {
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              {errors.confirmPassword && (
-                <p className="text-destructive text-sm mt-1">{errors.confirmPassword}</p>
-              )}
             </div>
           </CardContent>
 
@@ -266,7 +140,11 @@ export default function SignupPage() {
             <div className="space-y-4">
               <Label>Role</Label>
               <div className="flex gap-3">
-                {roleOptions.map((option) => {
+                {[
+                  { id: 'student' as Role, label: 'Student', icon: GraduationCap },
+                  { id: 'lecturer' as Role, label: 'Lecturer', icon: BookOpen },
+                  { id: 'classrep' as Role, label: 'Class Rep', icon: Users },
+                ].map((option) => {
                   const Icon = option.icon
                   const isSelected = role === option.id
                   return (
@@ -286,10 +164,6 @@ export default function SignupPage() {
                   )
                 })}
               </div>
-              {errors.role && (
-                <p className="text-destructive text-sm mt-1">{errors.role}</p>
-              )}
-            </div>
 
             <div className="space-y-4">
               <Label>College</Label>
@@ -305,9 +179,6 @@ export default function SignupPage() {
                   ))}
                 </SelectContent>
               </Select>
-              {errors.college && (
-                <p className="text-destructive text-sm mt-1">{errors.college}</p>
-              )}
             </div>
 
             <div className="space-y-4">
@@ -321,16 +192,13 @@ export default function SignupPage() {
                   <SelectValue placeholder={college ? 'Select department' : 'Select a college first'} />
                 </SelectTrigger>
                 <SelectContent>
-                  {availableDepartments.map((d: any) => (
+                  {availableDepartments.map((d) => (
                     <SelectItem key={d.id} value={d.id}>
                       {d.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.department && (
-                <p className="text-destructive text-sm mt-1">{errors.department}</p>
-              )}
             </div>
 
             {role !== 'lecturer' && (
@@ -346,16 +214,13 @@ export default function SignupPage() {
                       <SelectValue placeholder={department ? 'Select programme' : 'Select a department first'} />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableProgrammes.map((p: any) => (
+                      {availableProgrammes.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
                           {p.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.programme && (
-                    <p className="text-destructive text-sm mt-1">{errors.programme}</p>
-                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -372,9 +237,6 @@ export default function SignupPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  {errors.level && (
-                    <p className="text-destructive text-sm mt-1">{errors.level}</p>
-                  )}
                 </div>
               </>
             )}
@@ -387,6 +249,7 @@ export default function SignupPage() {
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
           </Button>
+        </CardContent>
         </form>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">

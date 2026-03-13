@@ -1,7 +1,19 @@
+import Navbar from '@/components/layout/Navbar'
+import AuthGuard from '@/components/auth/AuthGuard'
+
 export default function MainLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  return <div>{children}</div>;
+  return (
+    <AuthGuard>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="flex-1">
+          {children}
+        </main>
+      </div>
+    </AuthGuard>
+  )
 }
