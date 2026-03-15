@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Scholr
 
-## Getting Started
+Scholr is a highly-polished, feature-rich university course-material sharing platform built for Mountain Top University (MTU). It enables powerful academic collaboration by allowing students, lecturers, class reps, and administrators to upload, discover, and interact with academic files.
 
-First, run the development server:
+It features a built-in AI Study Assistant and Practice Quiz generator powered by Google Gemini to help students digest and test their knowledge on course materials instantly.
 
-```bash
+---
+
+## 🚀 Features
+
+- **Role-Based Access Control:** Secure, robust user profiles for Students, Class Reps, Lecturers, and Admins via Supabase.
+- **Academic Taxonomy:** Cascading selection for Colleges, Departments, Programmes, and Levels to perfectly organize materials.
+- **Smart Search & Filtering:** Instantly filter materials by semester, level, course code, or semantic text search.
+- **AI Study Assistant:** Context-aware LLM chat that answers questions based *strictly* on the document you are reading.
+- **AI Practice Quizzes:** Automatically extracts text from uploaded PDFs, DOCXs, and TXTs to generate interactive multiple-choice quizzes with detailed explanations.
+- **Discussion Threads & Bookmarks:** Engage with peers on specific course materials, mark answers as helpful, and save files to your personal library.
+- **Admin Dashboard:** Fully isolated portal for administrators to manage users and moderate content (books and files).
+- **Premium UI:** A unified, minimalist "zinc" design system built with TailwindCSS and shadcn/ui.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 16.1.6 (App Router)
+- **Language:** TypeScript 5
+- **Styling:** TailwindCSS 4, shadcn/ui (Radix Primitives)
+- **Database & Auth:** Supabase (PostgreSQL, Auth, Storage with RLS)
+- **AI Backend:** Google Gemini (via `groq-sdk` running Llama 3.3 70B)
+- **Document Parsing:** `pdf-parse`, `mammoth`
+
+---
+
+## 💻 Getting Started Locally
+
+### 1. Clone the repository
+\`\`\`bash
+git clone https://github.com/your-username/scholr.git
+cd scholr
+\`\`\`
+
+### 2. Install dependencies
+\`\`\`bash
+npm install
+\`\`\`
+
+### 3. Environment Variables
+Copy the example environment file and fill in your Supabase & Groq API keys:
+\`\`\`bash
+cp .env.example .env.local
+\`\`\`
+
+Required variables:
+- \`NEXT_PUBLIC_SUPABASE_URL\`
+- \`NEXT_PUBLIC_SUPABASE_ANON_KEY\`
+- \`SUPABASE_SERVICE_ROLE_KEY\`
+- \`GROQ_API_KEY\`
+- \`ADMIN_SIGNUP_CODE\` (Used to securely authorize new admin registrations)
+
+### 4. Run the Development Server
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔒 Security Posture
 
-## Learn More
+- **Row Level Security (RLS):** All 7 PostgreSQL tables are strictly protected by RLS.
+- **Route Guards:** Robust middleware redirects unauthenticated users and prevents non-admins from loading the admin portal.
+- **Server-Side API:** AI keys and admin service roles only execute on the server API routes. They are never bundled to the client.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+This project is licensed under the MIT License.
