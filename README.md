@@ -6,7 +6,7 @@ It features a built-in AI Study Assistant and Practice Quiz generator powered by
 
 ---
 
-## 🚀 Features
+##  Features
 
 - **Role-Based Access Control:** Secure, robust user profiles for Students, Class Reps, Lecturers, and Admins via Supabase.
 - **Academic Taxonomy:** Cascading selection for Colleges, Departments, Programmes, and Levels to perfectly organize materials.
@@ -19,7 +19,7 @@ It features a built-in AI Study Assistant and Practice Quiz generator powered by
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework:** Next.js 16.1.6 (App Router)
 - **Language:** TypeScript 5
@@ -30,7 +30,7 @@ It features a built-in AI Study Assistant and Practice Quiz generator powered by
 
 ---
 
-## 💻 Getting Started Locally
+##  Getting Started Locally
 
 ### 1. Clone the repository
 \`\`\`bash
@@ -65,7 +65,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ---
 
-## 🔒 Security Posture
+##  Security Posture
 
 - **Row Level Security (RLS):** All 7 PostgreSQL tables are strictly protected by RLS.
 - **Route Guards:** Robust middleware redirects unauthenticated users and prevents non-admins from loading the admin portal.
