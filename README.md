@@ -34,7 +34,7 @@ It features a built-in AI Study Assistant and Practice Quiz generator powered by
 
 ### 1. Clone the repository
 \`\`\`bash
-git clone https://github.com/your-username/scholr.git
+git clone https://github.com/danieldamilola/Scholr.git
 cd scholr
 \`\`\`
 
