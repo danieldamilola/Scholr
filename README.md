@@ -25,7 +25,7 @@ It features a built-in AI Study Assistant and Practice Quiz generator powered by
 - **Language:** TypeScript 5
 - **Styling:** TailwindCSS 4, shadcn/ui (Radix Primitives)
 - **Database & Auth:** Supabase (PostgreSQL, Auth, Storage with RLS)
-- **AI Backend:** Google Gemini (via `groq-sdk` running Llama 3.3 70B)
+- **AI Backend:** Google Gemini API
 - **Document Parsing:** `pdf-parse`, `mammoth`
 
 ---
@@ -43,25 +43,46 @@ cd scholr
 npm install
 \`\`\`
 
-### 3. Environment Variables
-Copy the example environment file and fill in your Supabase & Groq API keys:
-\`\`\`bash
-cp .env.example .env.local
-\`\`\`
+### 3. Set up Supabase
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Run the SQL script from \`SUPABASE_SETUP.sql\` in your Supabase SQL Editor
+3. Create storage buckets: \`course-materials\`, \`library-books\`, \`library-covers\`
+
+### 4. Environment Variables
+Create a \`.env.local\` file with the following variables:
 
 Required variables:
-- \`NEXT_PUBLIC_SUPABASE_URL\`
-- \`NEXT_PUBLIC_SUPABASE_ANON_KEY\`
-- \`SUPABASE_SERVICE_ROLE_KEY\`
-- \`GROQ_API_KEY\`
-- \`ADMIN_SIGNUP_CODE\` (Used to securely authorize new admin registrations)
+- \`NEXT_PUBLIC_SUPABASE_URL\` - Your Supabase project URL
+- \`NEXT_PUBLIC_SUPABASE_ANON_KEY\` - Your Supabase anon key
+- \`GOOGLE_AI_API_KEY\` - Your Google Gemini API key for AI features
 
-### 4. Run the Development Server
+### 5. Run the Development Server
 \`\`\`bash
 npm run dev
 \`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+---
+
+##  Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import your repository in Vercel
+3. Add the following environment variables in Vercel:
+   - \`NEXT_PUBLIC_SUPABASE_URL\`
+   - \`NEXT_PUBLIC_SUPABASE_ANON_KEY\`
+   - \`GOOGLE_AI_API_KEY\`
+4. Deploy
+
+### Environment Variables
+
+All environment variables should be set in your hosting platform:
+- \`NEXT_PUBLIC_SUPABASE_URL\` - Your Supabase project URL
+- \`NEXT_PUBLIC_SUPABASE_ANON_KEY\` - Your Supabase anon key (public)
+- \`GOOGLE_AI_API_KEY\` - Your Google Gemini API key (for AI features)
 
 ---
 

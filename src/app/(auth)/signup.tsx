@@ -172,7 +172,7 @@ export default function SignupPage() {
                           : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                       }`}
                     >
-                      <Icon className="h-5 w-5 mb-1" />
+                      <Icon className="size-5 mb-1" />
                       <span className="text-xs font-medium">{option.label}</span>
                     </button>
                   )

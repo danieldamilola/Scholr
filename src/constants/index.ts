@@ -4,6 +4,7 @@ export const COLLEGES = [
   'College of Basic and Applied Sciences',
   'College of Humanities, Management and Social Sciences',
   'College of Allied Health Sciences',
+  'General',
 ] as const;
 
 export const DEPARTMENTS = {
@@ -33,6 +34,9 @@ export const DEPARTMENTS = {
     'Public Health',
     'Nutrition and Dietetics',
   ],
+  'General': [
+    'General Courses',
+  ],
 } as const;
 
 export const PROGRAMMES = {
@@ -56,6 +60,7 @@ export const PROGRAMMES = {
   'Biomedical Technology': ['Biomedical Technology'],
   'Public Health': ['Public Health'],
   'Nutrition and Dietetics': ['Nutrition and Dietetics'],
+  'General Courses': ['General'],
 } as const;
 
 export const LEVELS = ['100', '200', '300', '400', '500'] as const;
@@ -99,6 +104,7 @@ export const USER_ROLES = [
   { value: 'student', label: 'Student' },
   { value: 'lecturer', label: 'Lecturer' },
   { value: 'class_rep', label: 'Class Representative' },
+  { value: 'librarian', label: 'Librarian' },
   { value: 'admin', label: 'Admin' },
 ] as const;
 

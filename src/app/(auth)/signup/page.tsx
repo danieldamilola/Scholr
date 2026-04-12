@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2, GraduationCap, BookOpen, Users } from 'lucide-react'
+import { Eye, EyeOff, Loader2, GraduationCap, BookOpen, Users, Library } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -11,10 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClientSingleton } from '@/lib/supabase/client'
 import { colleges, departments, programmes, levels, type Role, type Department, type Programme } from '@/lib/academic-data'
 
@@ -28,6 +23,7 @@ type FormErrors = {
   department?: string
   programme?: string
   level?: string
+  signupCode?: string
   general?: string
 }
 
@@ -43,11 +39,12 @@ export default function SignupPage() {
   const [department, setDepartment] = useState('')
   const [programme, setProgramme] = useState('')
   const [level, setLevel] = useState('')
+  const [signupCode, setSignupCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
 
-  const availableDepartments: Department[] = college ? departments[college] || [] : [];
-  const availableProgrammes: Programme[] = department ? programmes[department] || [] : [];
+  const availableDepartments: Department[] = college ? departments[college] || [] : []
+  const availableProgrammes: Programme[] = department ? programmes[department] || [] : []
 
   const handleCollegeChange = (value: string) => {
     setCollege(value)
@@ -63,9 +60,7 @@ export default function SignupPage() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
-    if (!fullName.trim()) {
-      newErrors.fullName = 'Full name is required'
-    }
+    if (!fullName.trim()) newErrors.fullName = 'Full name is required'
 
     if (!email.trim()) {
       newErrors.email = 'Email is required'
@@ -85,25 +80,22 @@ export default function SignupPage() {
       newErrors.confirmPassword = 'Passwords do not match'
     }
 
-    if (!role) {
-      newErrors.role = 'Please select a role'
-    }
+    if (!role) newErrors.role = 'Please select a role'
 
-    if (!college) {
-      newErrors.college = 'Please select a college'
-    }
-
-    if (!department) {
-      newErrors.department = 'Please select a department'
-    }
-
-    if (role !== 'lecturer') {
-      if (!programme) {
-        newErrors.programme = 'Please select a programme'
+    // Librarians don't need college/dept/programme/level
+    if (role !== 'librarian') {
+      if (!college) newErrors.college = 'Please select a college'
+      if (!department) newErrors.department = 'Please select a department'
+      if (role !== 'lecturer') {
+        if (!programme) newErrors.programme = 'Please select a programme'
+        if (!level) newErrors.level = 'Please select a level'
       }
-      if (!level) {
-        newErrors.level = 'Please select a level'
-      }
+    }
+
+    if (!signupCode) {
+      newErrors.signupCode = 'Sign up code is required'
+    } else if (signupCode !== process.env.NEXT_PUBLIC_SIGNUP_CODE) {
+      newErrors.signupCode = 'Invalid sign up code'
     }
 
     setErrors(newErrors)
@@ -113,9 +105,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!validateForm()) {
-      return
-    }
+    if (!validateForm()) return
 
     setIsLoading(true)
 
@@ -130,7 +120,7 @@ export default function SignupPage() {
             role: role,
             college,
             department,
-            programme,
+            programmes: [programme],
             level,
           },
         },
@@ -152,250 +142,286 @@ export default function SignupPage() {
     { id: 'student' as Role, label: 'Student', icon: GraduationCap },
     { id: 'lecturer' as Role, label: 'Lecturer', icon: BookOpen },
     { id: 'classrep' as Role, label: 'Class Rep', icon: Users },
+    { id: 'librarian' as Role, label: 'Librarian', icon: Library },
   ]
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          <CardDescription>
-            Join Scholr to access academic resources
-          </CardDescription>
-        </CardHeader>
+    <main className="min-h-screen flex items-center justify-center bg-zinc-50 py-12 px-4">
+      <div className="bg-white border border-zinc-200 rounded-md p-8 w-full max-w-lg">
+        <h1 className="text-zinc-900 font-bold text-xl mb-1">Scholr</h1>
+        <p className="text-zinc-400 text-sm mb-6">Create your account to get started.</p>
+
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-6">
-            {errors.general && (
-              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-                {errors.general}
-              </div>
+          {errors.general && (
+            <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600">
+              {errors.general}
+            </div>
+          )}
+
+          <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-3">
+            Account Details
+          </p>
+
+          <div className="mb-4">
+            <label htmlFor="fullName" className="block text-zinc-700 text-sm font-medium mb-1">
+              Full Name
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="John Doe"
+              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              disabled={isLoading}
+            />
+            {errors.fullName && (
+              <p className="text-red-600 text-sm mt-1">{errors.fullName}</p>
             )}
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  placeholder="John Doe"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-                {errors.fullName && (
-                  <p className="text-destructive text-sm mt-1">{errors.fullName}</p>
-                )}
-              </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-zinc-700 text-sm font-medium mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              disabled={isLoading}
+            />
+            {errors.email && (
+              <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-                {errors.email && (
-                  <p className="text-destructive text-sm mt-1">{errors.email}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="•••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-destructive text-sm mt-1">{errors.password}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="•••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-destructive text-sm mt-1">{errors.confirmPassword}</p>
-              )}
-            </div>
-          </CardContent>
-
-          <CardFooter className="space-y-4">
-            <p className="text-xs font-medium uppercase tracking-wide">Academic Profile</p>
-            
-            <div className="space-y-4">
-              <Label>Role</Label>
-              <div className="flex gap-3">
-                {roleOptions.map((option) => {
-                  const Icon = option.icon
-                  const isSelected = role === option.id
-                  return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      onClick={() => setRole(option.id)}
-                      className={`flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-md border transition-colors ${
-                        isSelected
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5 mb-1" />
-                      <span className="text-xs font-medium">{option.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-              {errors.role && (
-                <p className="text-destructive text-sm mt-1">{errors.role}</p>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              <Label>College</Label>
-              <Select value={college} onValueChange={handleCollegeChange}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select college" />
-                </SelectTrigger>
-                <SelectContent>
-                  {colleges.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.college && (
-                <p className="text-destructive text-sm mt-1">{errors.college}</p>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              <Label>Department</Label>
-              <Select
-                value={department}
-                onValueChange={handleDepartmentChange}
-                disabled={!college}
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-zinc-700 text-sm font-medium mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 pr-10"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={college ? 'Select department' : 'Select a college first'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableDepartments.map((d: any) => (
-                    <SelectItem key={d.id} value={d.id}>
-                      {d.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.department && (
-                <p className="text-destructive text-sm mt-1">{errors.department}</p>
-              )}
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
             </div>
-
-            {role !== 'lecturer' && (
-              <>
-                <div className="space-y-4">
-                  <Label>Programme</Label>
-                  <Select
-                    value={programme}
-                    onValueChange={setProgramme}
-                    disabled={!department}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={department ? 'Select programme' : 'Select a department first'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableProgrammes.map((p: any) => (
-                        <SelectItem key={p.id} value={p.id}>
-                          {p.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.programme && (
-                    <p className="text-destructive text-sm mt-1">{errors.programme}</p>
-                  )}
-                </div>
-
-                <div className="space-y-4">
-                  <Label>Level</Label>
-                  <Select value={level} onValueChange={setLevel}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {levels.map((l) => (
-                        <SelectItem key={l.id} value={l.id}>
-                          {l.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.level && (
-                    <p className="text-destructive text-sm mt-1">{errors.level}</p>
-                  )}
-                </div>
-              </>
+            {errors.password && (
+              <p className="text-red-600 text-sm mt-1">{errors.password}</p>
             )}
-          </CardFooter>
+          </div>
 
-          <Button
+          <div className="mb-4">
+            <label htmlFor="confirmPassword" className="block text-zinc-700 text-sm font-medium mb-1">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••"
+                className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 pr-10"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              >
+                {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="signupCode" className="block text-zinc-700 text-sm font-medium mb-1">
+              Sign Up Code
+            </label>
+            <input
+              id="signupCode"
+              type="text"
+              value={signupCode}
+              onChange={(e) => setSignupCode(e.target.value)}
+              placeholder="Enter MTU sign up code"
+              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              disabled={isLoading}
+            />
+            {errors.signupCode && (
+              <p className="text-red-600 text-sm mt-1">{errors.signupCode}</p>
+            )}
+          </div>
+
+          <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-3 mt-6">
+            Academic Profile
+          </p>
+
+          <div className="mb-4">
+            <label className="block text-zinc-700 text-sm font-medium mb-2">
+              Role
+            </label>
+            <div className="flex gap-3">
+              {roleOptions.map((option) => {
+                const Icon = option.icon
+                const isSelected = role === option.id
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setRole(option.id)}
+                    className={`flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-md border transition-colors ${
+                      isSelected
+                        ? 'bg-blue-50 border-blue-600 text-blue-700'
+                        : 'bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                    }`}
+                  >
+                    <Icon className="size-5 mb-1" />
+                    <span className="text-xs font-medium">{option.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+            {errors.role && (
+              <p className="text-red-600 text-sm mt-1">{errors.role}</p>
+            )}
+          </div>
+
+          {role !== 'librarian' && (
+            <>
+          <div className="mb-4">
+            <label className="block text-zinc-700 text-sm font-medium mb-1">
+              College
+            </label>
+            <Select value={college} onValueChange={handleCollegeChange} disabled={isLoading}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select college" />
+              </SelectTrigger>
+              <SelectContent>
+                {colleges.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.college && (
+              <p className="text-red-600 text-sm mt-1">{errors.college}</p>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-zinc-700 text-sm font-medium mb-1">
+              Department
+            </label>
+            <Select
+              value={department}
+              onValueChange={handleDepartmentChange}
+              disabled={!college || isLoading}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={college ? 'Select department' : 'Select a college first'} />
+              </SelectTrigger>
+              <SelectContent>
+                {availableDepartments.map((d) => (
+                  <SelectItem key={d.id} value={d.id}>
+                    {d.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.department && (
+              <p className="text-red-600 text-sm mt-1">{errors.department}</p>
+            )}
+          </div>
+            </>
+          )}
+
+          {role !== 'lecturer' && role !== 'librarian' && (
+            <>
+              <div className="mb-4">
+                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                  Programme
+                </label>
+                <Select
+                  value={programme}
+                  onValueChange={setProgramme}
+                  disabled={!department || isLoading}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={department ? 'Select programme' : 'Select a department first'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableProgrammes.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.programme && (
+                  <p className="text-red-600 text-sm mt-1">{errors.programme}</p>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                  Level
+                </label>
+                <Select value={level} onValueChange={setLevel} disabled={isLoading}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {levels.map((l) => (
+                      <SelectItem key={l.id} value={l.id}>
+                        {l.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.level && (
+                  <p className="text-red-600 text-sm mt-1">{errors.level}</p>
+                )}
+              </div>
+            </>
+          )}
+
+          <button
             type="submit"
-            className="w-full"
             disabled={isLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
-          </Button>
+            {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Create Account'}
+          </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary hover:underline">
+        <p className="text-zinc-500 text-sm mt-4 text-center">
+          {'Already have an account? '}
+          <Link href="/login" className="text-blue-600 hover:text-blue-700">
             Sign in
           </Link>
-        </div>
-      </Card>
+        </p>
+      </div>
     </main>
   )
 }

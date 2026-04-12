@@ -1,6 +1,6 @@
 import { COLLEGES, DEPARTMENTS, PROGRAMMES, LEVELS } from '@/constants'
 
-export type Role = 'student' | 'lecturer' | 'classrep'
+export type Role = 'student' | 'lecturer' | 'classrep' | 'librarian'
 
 export interface College {
   id: string

@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'lecturer' | 'class_rep' | 'admin';
+export type UserRole = 'student' | 'lecturer' | 'class_rep' | 'admin' | 'librarian';
 
 export type FileType = 'PDF' | 'DOCX' | 'PPTX' | 'PNG' | 'JPG' | 'TXT';
 
@@ -13,7 +13,7 @@ export interface UserProfile {
   role: UserRole;
   college?: string;
   department?: string;
-  programme?: string;
+  programmes?: string[];
   level?: string;
   avatar_url?: string;
   created_at: string;
@@ -26,7 +26,7 @@ export interface FileRecord {
   description?: string;
   college: string;
   department: string;
-  programme: string;
+  programmes: string[];
   level: string;
   semester: string;
   file_type: FileType;

@@ -12,7 +12,7 @@ export interface Database {
           role: 'student' | 'lecturer' | 'class_rep' | 'admin'
           college?: string
           department?: string
-          programme?: string
+          programmes?: string[]
           level?: string
           avatar_url?: string
           created_at: string
@@ -28,7 +28,7 @@ export interface Database {
           description?: string
           college: string
           department: string
-          programme: string
+          programmes: string[]
           level: string
           semester: string
           file_type: 'PDF' | 'DOCX' | 'PPTX' | 'PNG' | 'JPG' | 'TXT'

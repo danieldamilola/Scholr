@@ -967,3 +967,586 @@ export function EmptyState({
 
 
 
+//dashboard
+"use client";
+
+import Link from "next/link";
+import { motion } from "motion/react";
+import { Bookmark, MessageSquare } from "lucide-react";
+import { MaterialCard } from "@/components/material-card";
+import { cn } from "@/lib/utils";
+
+const STAGGER_CONTAINER = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const REVEAL_ITEM = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
+};
+
+const MOCK_MATERIALS = [
+  {
+    id: "1",
+    title: "Introduction to Data Structures and Algorithms",
+    courseCode: "CSC 201",
+    description: "Comprehensive notes covering arrays, linked lists, stacks, queues, and basic algorithmic complexity.",
+    type: "PDF" as const,
+    level: 200,
+    semester: "Alpha",
+    downloads: 124,
+    isBookmarked: false,
+  },
+  {
+    id: "2",
+    title: "Linear Algebra II - Vector Spaces",
+    courseCode: "MTH 203",
+    description: "Lecture slides on vector spaces, subspaces, linear independence, and basis.",
+    type: "PPTX" as const,
+    level: 200,
+    semester: "Alpha",
+    downloads: 89,
+    isBookmarked: true,
+  },
+  {
+    id: "3",
+    title: "Software Engineering Principles",
+    courseCode: "CSC 305",
+    description: "Study guide for software development life cycles, agile methodologies, and requirements engineering.",
+    type: "DOCX" as const,
+    level: 300,
+    semester: "Omega",
+    downloads: 210,
+    isBookmarked: false,
+  },
+];
+
+const MOCK_DISCUSSIONS = [
+  {
+    id: "d1",
+    title: "Question about Big O notation in Chapter 3",
+    courseCode: "CSC 201",
+    lastReply: "2 hours ago",
+    fileId: "1",
+  },
+  {
+    id: "d2",
+    title: "Can someone explain the proof for Theorem 4.2?",
+    courseCode: "MTH 203",
+    lastReply: "Yesterday",
+    fileId: "2",
+  },
+];
+
+export default function DashboardPage() {
+  const date = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  return (
+    <div className="space-y-10">
+      {/* Hero Section */}
+      <div>
+        <h1 className="text-[24px] font-semibold text-foreground mb-1">
+          Good evening, John
+        </h1>
+        <p className="text-[14px] text-muted-foreground">
+          {date} · Computer Science · 200 Level
+        </p>
+      </div>
+
+      {/* Quick Stats Bar */}
+      <motion.div 
+        variants={STAGGER_CONTAINER}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+      >
+        <motion.div variants={REVEAL_ITEM} className="bg-card border border-border rounded-[10px] p-5">
+          <div className="text-[28px] font-bold text-foreground font-sans">42</div>
+          <div className="text-[12px] text-muted-foreground mt-1">Files in your Programme</div>
+        </motion.div>
+        <motion.div variants={REVEAL_ITEM} className="bg-card border border-border rounded-[10px] p-5">
+          <div className="text-[28px] font-bold text-foreground font-sans">12</div>
+          <div className="text-[12px] text-muted-foreground mt-1">Bookmarked</div>
+        </motion.div>
+        <motion.div variants={REVEAL_ITEM} className="bg-card border border-border rounded-[10px] p-5">
+          <div className="text-[28px] font-bold text-foreground font-sans">3</div>
+          <div className="text-[12px] text-muted-foreground mt-1">Unread Notifications</div>
+        </motion.div>
+      </motion.div>
+
+      {/* Recent Materials */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[22px] font-semibold text-foreground">New in Computer Science</h2>
+          <Link href="/browse" className="text-[14px] text-primary hover:underline">
+            See all
+          </Link>
+        </div>
+        <motion.div 
+          variants={STAGGER_CONTAINER}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          {MOCK_MATERIALS.map((material) => (
+            <motion.div key={material.id} variants={REVEAL_ITEM}>
+              <MaterialCard {...material} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Your Bookmarks */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[22px] font-semibold text-foreground">Your Bookmarks</h2>
+          <Link href="/bookmarks" className="text-[14px] text-primary hover:underline">
+            See all
+          </Link>
+        </div>
+        <motion.div 
+          variants={STAGGER_CONTAINER}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          {MOCK_MATERIALS.filter(m => m.isBookmarked).map((material) => (
+            <motion.div key={material.id} variants={REVEAL_ITEM}>
+              <MaterialCard {...material} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Recent Discussions */}
+      <section>
+        <h2 className="text-[22px] font-semibold text-foreground mb-4">Recent Discussions</h2>
+        <div className="bg-card border border-border rounded-[10px] overflow-hidden">
+          {MOCK_DISCUSSIONS.map((discussion, index) => (
+            <Link 
+              key={discussion.id} 
+              href={`/file/${discussion.fileId}#discussion`}
+              className={cn(
+                "flex items-center justify-between p-4 transition-colors hover:bg-accent-bg",
+                index !== MOCK_DISCUSSIONS.length - 1 && "border-b border-border"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <div className="bg-secondary p-2 rounded-full">
+                  <MessageSquare className="w-4 h-4 text-secondary-foreground" />
+                </div>
+                <div>
+                  <div className="text-[14px] font-medium text-foreground mb-1">{discussion.title}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="bg-secondary text-primary font-mono text-[11px] px-1.5 py-0.5 rounded-sm">
+                      {discussion.courseCode}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-[12px] text-muted-foreground">
+                {discussion.lastReply}
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
+
+
+//file details page
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { 
+  ChevronLeft, ChevronRight, Download, Bookmark, Share2, 
+  ThumbsUp, MessageSquare, Send, Sparkles, BrainCircuit, Loader2
+} from "lucide-react";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
+// Mock Data
+const FILE_DATA = {
+  id: "1",
+  title: "Introduction to Data Structures and Algorithms",
+  courseCode: "CSC 201",
+  college: "CBAS",
+  department: "Computer Science",
+  programme: "B.Sc. Computer Science",
+  uploadDate: "Oct 12, 2025",
+  uploaderName: "Dr. Adebayo",
+  level: 200,
+  semester: "Alpha",
+  totalPages: 42,
+};
+
+const MOCK_THREADS = [
+  {
+    id: "t1",
+    author: "Jane Smith",
+    avatar: "JS",
+    timestamp: "2 hours ago",
+    content: "Can someone explain the difference between a stack and a queue in simple terms?",
+    helpful: true,
+    replies: [
+      {
+        id: "r1",
+        author: "Dr. Adebayo",
+        avatar: "DA",
+        timestamp: "1 hour ago",
+        content: "Think of a stack like a stack of plates (LIFO - Last In, First Out). You add to the top and remove from the top. A queue is like a line at a cafeteria (FIFO - First In, First Out). You join at the back and leave from the front.",
+        isLecturer: true,
+      }
+    ]
+  }
+];
+
+const MOCK_AI_CHAT = [
+  { id: "1", role: "ai", content: "Hi! I'm your AI Study Assistant. I've read this document. What would you like to know?", timestamp: "10:00 AM" },
+  { id: "2", role: "user", content: "Summarize chapter 2 for me.", timestamp: "10:02 AM" },
+  { id: "3", role: "ai", content: "Chapter 2 covers Arrays and Linked Lists. It explains that arrays offer O(1) access time but O(n) insertion/deletion, while linked lists offer O(1) insertion/deletion (if you have the pointer) but O(n) access time. It concludes with a comparison table on page 15.", timestamp: "10:03 AM" },
+];
+
+export default function FileDetailPage() {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [activeTab, setActiveTab] = useState<"ai" | "quiz">("ai");
+  const [chatInput, setChatInput] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
+  
+  // Quiz State
+  const [quizState, setQuizState] = useState<"idle" | "generating" | "active" | "results">("idle");
+  const [quizQuestions, setQuizQuestions] = useState(3);
+  const [quizDifficulty, setQuizDifficulty] = useState("Medium");
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: '',
+    immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[100px] p-3 bg-input border border-border rounded-md',
+      },
+    },
+  });
+
+  const handlePrevPage = () => setPageNumber(p => Math.max(1, p - 1));
+  const handleNextPage = () => setPageNumber(p => Math.min(FILE_DATA.totalPages, p + 1));
+
+  return (
+    <div className="flex flex-1 w-full max-w-[1600px] mx-auto">
+      {/* Left Column - Content */}
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 lg:max-w-[65%] xl:max-w-[70%]">
+        {/* Breadcrumb */}
+        <div className="text-[12px] text-muted-foreground mb-4">
+          {FILE_DATA.college} <span className="mx-1">›</span> {FILE_DATA.department} <span className="mx-1">›</span> {FILE_DATA.programme}
+        </div>
+
+        {/* File Header */}
+        <div className="mb-6">
+          <h1 className="text-[28px] sm:text-[32px] font-semibold text-foreground leading-[1.2] mb-3">
+            {FILE_DATA.title}
+          </h1>
+          <div className="flex flex-wrap items-center gap-3 text-[13px]">
+            <span className="bg-secondary text-primary font-mono px-2 py-1 rounded-sm">
+              {FILE_DATA.courseCode}
+            </span>
+            <span className="text-muted-foreground">Uploaded {FILE_DATA.uploadDate}</span>
+            <span className="text-muted-foreground">by <span className="text-foreground font-medium">{FILE_DATA.uploaderName}</span></span>
+            <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-sm">Level {FILE_DATA.level}</span>
+            <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-sm">{FILE_DATA.semester} Semester</span>
+          </div>
+        </div>
+
+        {/* Action Bar */}
+        <div className="flex items-center gap-3 mb-8">
+          <Button className="h-[40px] px-6 rounded-sm bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-[14px] gap-2">
+            <Download className="w-4 h-4" />
+            Download PDF
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={() => setIsBookmarked(!isBookmarked)}
+            className="h-[40px] px-4 rounded-sm border-border hover:bg-accent-bg text-secondary-foreground bg-transparent gap-2"
+          >
+            <Bookmark className={cn("w-4 h-4", isBookmarked && "fill-primary text-primary")} />
+            {isBookmarked ? "Saved" : "Save"}
+          </Button>
+          <Button variant="outline" className="h-[40px] px-4 rounded-sm border-border hover:bg-accent-bg text-secondary-foreground bg-transparent gap-2">
+            <Share2 className="w-4 h-4" />
+            Share
+          </Button>
+        </div>
+
+        {/* PDF Preview Panel */}
+        <div className="bg-card border border-border rounded-[10px] overflow-hidden mb-10 flex flex-col">
+          <div className="w-full h-[600px] bg-secondary/50 flex items-center justify-center relative">
+            {/* Placeholder for react-pdf */}
+            <div className="w-[80%] h-[90%] bg-background border border-border shadow-sm flex items-center justify-center text-muted-foreground">
+              PDF Page {pageNumber} Content
+            </div>
+          </div>
+          <div className="flex items-center justify-between p-3 bg-card border-t border-border">
+            <Button variant="ghost" size="icon" onClick={handlePrevPage} disabled={pageNumber === 1} className="text-secondary-foreground hover:text-foreground">
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+            <span className="text-[13px] text-muted-foreground font-mono">
+              {pageNumber} / {FILE_DATA.totalPages}
+            </span>
+            <Button variant="ghost" size="icon" onClick={handleNextPage} disabled={pageNumber === FILE_DATA.totalPages} className="text-secondary-foreground hover:text-foreground">
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Discussion Section */}
+        <div id="discussion" className="mb-20">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-[22px] font-semibold text-foreground">Discussion</h2>
+            {!isComposing && (
+              <Button onClick={() => setIsComposing(true)} className="h-[36px] px-4 rounded-sm bg-secondary hover:bg-secondary/80 text-foreground font-medium text-[13px]">
+                Start a thread
+              </Button>
+            )}
+          </div>
+
+          {isComposing && (
+            <div className="mb-8 bg-card border border-border rounded-[10px] p-4">
+              <EditorContent editor={editor} />
+              <div className="flex justify-end gap-2 mt-3">
+                <Button variant="ghost" onClick={() => setIsComposing(false)} className="h-[32px] text-[13px]">Cancel</Button>
+                <Button className="h-[32px] text-[13px] bg-primary hover:bg-primary/90 text-primary-foreground">Post</Button>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-6">
+            {MOCK_THREADS.map((thread) => (
+              <div key={thread.id} className="flex gap-3">
+                <Avatar className="w-8 h-8 border border-border mt-1">
+                  <AvatarFallback className="bg-muted text-xs">{thread.avatar}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-[13px] font-semibold text-foreground">{thread.author}</span>
+                    <span className="text-[11px] text-muted-foreground">{thread.timestamp}</span>
+                  </div>
+                  <p className="text-[14px] text-secondary-foreground mb-2">{thread.content}</p>
+                  <div className="flex items-center gap-4 mb-4">
+                    <button className="text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors">Reply</button>
+                    <button className="flex items-center gap-1 text-[12px] font-medium text-primary hover:text-primary/80 transition-colors">
+                      <ThumbsUp className="w-3.5 h-3.5 fill-primary" />
+                      Helpful
+                    </button>
+                  </div>
+
+                  {/* Replies */}
+                  {thread.replies.map((reply) => (
+                    <div key={reply.id} className="flex gap-3 mt-4 pl-4 border-l border-border">
+                      <Avatar className="w-6 h-6 border border-border mt-1">
+                        <AvatarFallback className="bg-muted text-[10px]">{reply.avatar}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-baseline gap-2 mb-1">
+                          <span className="text-[13px] font-semibold text-foreground">{reply.author}</span>
+                          {reply.isLecturer && (
+                            <span className="bg-primary/10 text-primary text-[10px] px-1.5 py-0.5 rounded-sm font-medium">Lecturer</span>
+                          )}
+                          <span className="text-[11px] text-muted-foreground">{reply.timestamp}</span>
+                        </div>
+                        <p className="text-[14px] text-secondary-foreground">{reply.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* Right Column - AI Sidebar (Desktop) */}
+      <aside className="hidden lg:flex flex-col w-[35%] xl:w-[30%] flex-shrink-0 border-l border-border bg-secondary/30 sticky top-[56px] h-[calc(100vh-56px)]">
+        {/* Tabs */}
+        <div className="flex border-b border-border">
+          <button 
+            onClick={() => setActiveTab("ai")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 h-[48px] text-[14px] font-medium transition-colors border-b-2",
+              activeTab === "ai" ? "border-primary text-primary" : "border-transparent text-secondary-foreground hover:text-foreground"
+            )}
+          >
+            <Sparkles className="w-4 h-4" />
+            AI Assistant
+          </button>
+          <button 
+            onClick={() => setActiveTab("quiz")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 h-[48px] text-[14px] font-medium transition-colors border-b-2",
+              activeTab === "quiz" ? "border-primary text-primary" : "border-transparent text-secondary-foreground hover:text-foreground"
+            )}
+          >
+            <BrainCircuit className="w-4 h-4" />
+            Quiz
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className="flex-1 overflow-hidden relative">
+          {activeTab === "ai" ? (
+            <div className="flex flex-col h-full">
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {MOCK_AI_CHAT.map((msg) => (
+                  <div key={msg.id} className={cn("flex flex-col max-w-[85%]", msg.role === "user" ? "ml-auto items-end" : "mr-auto items-start")}>
+                    <div className={cn(
+                      "p-3 text-[14px] leading-relaxed",
+                      msg.role === "user" 
+                        ? "bg-primary text-primary-foreground rounded-[14px] rounded-br-sm" 
+                        : "bg-card border border-border text-foreground rounded-[14px] rounded-tl-sm"
+                    )}>
+                      {msg.content}
+                    </div>
+                    <span className="text-[11px] text-muted-foreground mt-1 px-1">{msg.timestamp}</span>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Chat Input */}
+              <div className="p-4 bg-background border-t border-border">
+                <div className="relative flex items-end bg-input border border-border rounded-[10px] focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+                  <textarea 
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Ask a question about this document..."
+                    className="w-full bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground p-3 min-h-[44px] max-h-[120px] resize-none focus:outline-none"
+                    rows={1}
+                  />
+                  <button className="p-2 m-1 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50">
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="h-full overflow-y-auto p-6">
+              {quizState === "idle" && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-[16px] font-semibold text-foreground mb-2">Generate a Quiz</h3>
+                    <p className="text-[13px] text-muted-foreground">Test your knowledge on this document. The AI will generate multiple-choice questions based on the content.</p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <label className="text-[13px] font-medium text-foreground">Number of questions</label>
+                    <div className="flex gap-2">
+                      {[3, 5, 10].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => setQuizQuestions(num)}
+                          className={cn(
+                            "flex-1 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                            quizQuestions === num 
+                              ? "bg-primary/10 text-primary border-primary/20" 
+                              : "bg-card text-secondary-foreground border-border hover:text-foreground"
+                          )}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[13px] font-medium text-foreground">Difficulty</label>
+                    <div className="flex gap-2">
+                      {["Easy", "Medium", "Hard"].map((diff) => (
+                        <button
+                          key={diff}
+                          onClick={() => setQuizDifficulty(diff)}
+                          className={cn(
+                            "flex-1 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                            quizDifficulty === diff 
+                              ? "bg-primary/10 text-primary border-primary/20" 
+                              : "bg-card text-secondary-foreground border-border hover:text-foreground"
+                          )}
+                        >
+                          {diff}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button 
+                    onClick={() => setQuizState("generating")}
+                    className="w-full h-[40px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-sm mt-4"
+                  >
+                    Generate Quiz
+                  </Button>
+                </div>
+              )}
+
+              {quizState === "generating" && (
+                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                  <p className="text-[14px] text-secondary-foreground">Analyzing document and generating questions...</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* Mobile AI/Quiz FAB */}
+      <Sheet>
+        <SheetTrigger className="lg:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-overlay flex items-center justify-center hover:scale-105 transition-transform">
+          <Sparkles className="w-6 h-6" />
+        </SheetTrigger>
+        <SheetContent side="bottom" className="h-[85vh] bg-background border-t-border p-0 rounded-t-[14px] flex flex-col">
+           {/* Mobile Tabs */}
+          <div className="flex border-b border-border shrink-0">
+            <button 
+              onClick={() => setActiveTab("ai")}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 h-[48px] text-[14px] font-medium transition-colors border-b-2",
+                activeTab === "ai" ? "border-primary text-primary" : "border-transparent text-secondary-foreground hover:text-foreground"
+              )}
+            >
+              <Sparkles className="w-4 h-4" />
+              AI Assistant
+            </button>
+            <button 
+              onClick={() => setActiveTab("quiz")}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 h-[48px] text-[14px] font-medium transition-colors border-b-2",
+                activeTab === "quiz" ? "border-primary text-primary" : "border-transparent text-secondary-foreground hover:text-foreground"
+              )}
+            >
+              <BrainCircuit className="w-4 h-4" />
+              Quiz
+            </button>
+          </div>
+          {/* Content would be duplicated here for mobile, keeping it simple for now */}
+          <div className="flex-1 flex items-center justify-center text-muted-foreground p-6 text-center">
+            Mobile view content here (same as desktop sidebar)
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}
