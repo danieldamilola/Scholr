@@ -1,130 +1,173 @@
-import Image from "next/image";
+import Link from 'next/link'
+import {
+  FileText, Sparkles, BrainCircuit, BookMarked, Bell, Shield, ArrowRight
+} from 'lucide-react'
+import { FadeIn } from '@/components/landing/FadeIn'
 
+const features = [
+  { icon: FileText,     title: 'Course Materials',   desc: 'Notes, slides, and past questions organised by department, level, and semester.' },
+  { icon: BrainCircuit, title: 'AI Study Assistant', desc: 'Ask questions about any uploaded file and get accurate, contextual answers instantly.' },
+  { icon: Sparkles,     title: 'Quiz Generator',     desc: 'Auto-generate exam-style questions from any document with one click.' },
+  { icon: BookMarked,   title: 'Digital Library',    desc: 'Browse textbooks and reference books maintained by dedicated librarians.' },
+  { icon: Bell,         title: 'Request System',     desc: 'Request materials from lecturers or class reps and get notified when they respond.' },
+  { icon: Shield,       title: 'Secured Access',     desc: 'Invite-code protected — only verified students and staff can register.' },
+]
 
+const roles = [
+  { title: 'Students',   desc: 'Browse, download, bookmark, and study with AI — all from your dashboard.' },
+  { title: 'Lecturers',  desc: 'Upload and manage course materials. Respond to student requests.' },
+  { title: 'Class Reps', desc: 'Share resources and coordinate materials for your entire class.' },
+  { title: 'Librarians', desc: 'Manage the digital library, upload textbooks and reference books.' },
+]
 
-export default function Home() {
-
+export default function LandingPage() {
   return (
+    <div className="min-h-screen bg-white font-sans antialiased">
 
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      {/* Navbar */}
+      <nav className="fixed top-0 inset-x-0 z-50 h-14 border-b border-zinc-200 bg-white/95 backdrop-blur-sm">
+        <div className="mx-auto flex h-full max-w-5xl items-center justify-between px-6">
+          {/* Logo fades in immediately */}
+          <span className="anim-fade-in text-sm font-bold text-zinc-900 tracking-tight">Scholr</span>
+          <div className="anim-fade-in delay-200 flex items-center gap-1">
+            <Link href="/login" className="h-8 px-4 text-sm text-zinc-500 hover:text-zinc-900 transition-colors flex items-center">
+              Sign in
+            </Link>
+            <Link href="/signup" className="h-8 px-4 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors flex items-center gap-1.5">
+              Get started <ArrowRight className="size-3" />
+            </Link>
+          </div>
+        </div>
+      </nav>
 
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+      {/* Hero — staggered load animations */}
+      <section className="max-w-5xl mx-auto px-6 pt-40 pb-32">
+        {/* Label */}
+        <p className="anim-fade-up text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-7">
+          Academic Resource Platform
+        </p>
 
-        <Image
-
-          className="dark:invert"
-
-          src="/next.svg"
-
-          alt="Next.js logo"
-
-          width={100}
-
-          height={20}
-
-          priority
-
-        />
-
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-
-            To get started, edit the page.tsx file.
-
+        {/* Heading staggered by word-group */}
+        <div className="overflow-hidden mb-8">
+          <h1 className="anim-fade-up delay-100 text-6xl sm:text-7xl font-bold tracking-tight text-zinc-900 leading-[1.06] max-w-2xl">
+            Study smarter.
+            <br />
+            <span className="anim-fade-up delay-200 inline-block text-blue-600">Access more.</span>
           </h1>
+        </div>
 
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-
-            Looking for a starting point or more instructions? Head over to{" "}
-
-            <a
-
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-
-            >
-
-              Templates
-
-            </a>{" "}
-
-            or the{" "}
-
-            <a
-
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-
-            >
-
-              Learning
-
-            </a>{" "}
-
-            center.
-
+        <div className="anim-fade-up delay-300 flex flex-col sm:flex-row sm:items-end justify-between gap-10">
+          <p className="text-base text-zinc-400 max-w-sm leading-relaxed">
+            One platform for MTU students, lecturers, and class reps
+            to share course materials and learn with AI.
           </p>
-
+          <div className="flex items-center gap-4 shrink-0">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 h-10 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            >
+              Get started <ArrowRight className="size-3.5" />
+            </Link>
+            <Link href="/login" className="text-sm text-zinc-400 hover:text-zinc-900 transition-colors">
+              Sign in →
+            </Link>
+          </div>
         </div>
+      </section>
 
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6"><div className="border-t border-zinc-100" /></div>
 
-          <a
+      {/* Features */}
+      <section className="max-w-5xl mx-auto px-6 py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
 
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 pt-1">
+              What&apos;s inside
+            </p>
+          </FadeIn>
 
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-
-            target="_blank"
-
-            rel="noopener noreferrer"
-
-          >
-
-            <Image
-
-              className="dark:invert"
-
-              src="/vercel.svg"
-
-              alt="Vercel logomark"
-
-              width={16}
-
-              height={16}
-
-            />
-
-            Deploy Now
-
-          </a>
-
-          <a
-
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-
-            target="_blank"
-
-            rel="noopener noreferrer"
-
-          >
-
-            Documentation
-
-          </a>
-
+          <div>
+            {features.map((f, i) => {
+              const Icon = f.icon
+              return (
+                <FadeIn key={f.title} delay={i * 60}>
+                  <div className={`flex items-start gap-5 py-6 ${i !== features.length - 1 ? 'border-b border-zinc-100' : ''}`}>
+                    <div className="mt-0.5 shrink-0 size-8 flex items-center justify-center rounded-md bg-zinc-50 border border-zinc-200">
+                      <Icon className="size-3.5 text-zinc-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-zinc-900 mb-1">{f.title}</p>
+                      <p className="text-sm text-zinc-400 leading-relaxed">{f.desc}</p>
+                    </div>
+                  </div>
+                </FadeIn>
+              )
+            })}
+          </div>
         </div>
+      </section>
 
-      </main>
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6"><div className="border-t border-zinc-100" /></div>
+
+      {/* Roles */}
+      <section className="max-w-5xl mx-auto px-6 py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
+
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 pt-1">
+              Who it&apos;s for
+            </p>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10">
+            {roles.map((r, i) => (
+              <FadeIn key={r.title} delay={i * 80}>
+                <p className="text-sm font-semibold text-zinc-900 mb-1.5">{r.title}</p>
+                <p className="text-sm text-zinc-400 leading-relaxed">{r.desc}</p>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6"><div className="border-t border-zinc-100" /></div>
+
+      {/* CTA */}
+      <section className="max-w-5xl mx-auto px-6 py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
+          <div />
+          <FadeIn>
+            <h2 className="text-3xl font-bold text-zinc-900 mb-4 leading-tight">
+              Ready to get started?
+            </h2>
+            <p className="text-sm text-zinc-400 mb-8 max-w-sm leading-relaxed">
+              Sign up with your MTU invite code and join your fellow students on Scholr.
+            </p>
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 h-10 px-6 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            >
+              Create your account <ArrowRight className="size-3.5" />
+            </Link>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <div className="max-w-5xl mx-auto px-6"><div className="border-t border-zinc-100" /></div>
+      <footer className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <span className="text-xs font-semibold text-zinc-400">Scholr</span>
+        <span className="text-xs text-zinc-300">© {new Date().getFullYear()} Mountain Top University</span>
+        <div className="flex gap-5">
+          <Link href="/login" className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors">Sign in</Link>
+          <Link href="/signup" className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors">Sign up</Link>
+        </div>
+      </footer>
 
     </div>
-
-  );
-
+  )
 }
-
