@@ -9,7 +9,7 @@ export interface Database {
           id: string
           full_name: string
           email: string
-          role: 'student' | 'lecturer' | 'class_rep' | 'admin'
+          role: 'student' | 'lecturer' | 'class_rep' | 'admin' | 'librarian'
           college?: string
           department?: string
           programmes?: string[]
@@ -110,6 +110,29 @@ export interface Database {
         }
         Insert: Omit<Database['public']['Tables']['notifications']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['notifications']['Insert']>
+      }
+      requests: {
+        Row: {
+          id: string
+          requester_id: string
+          requester_name: string
+          requester_role: string
+          target_role: string
+          target_id?: string | null
+          type: 'file' | 'book' | 'other'
+          title: string
+          description?: string | null
+          course_code?: string | null
+          college?: string | null
+          department?: string | null
+          status: 'pending' | 'approved' | 'denied'
+          response_message?: string | null
+          responded_by?: string | null
+          responded_at?: string | null
+          created_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['requests']['Row'], 'id' | 'created_at'>
+        Update: Partial<Database['public']['Tables']['requests']['Insert']>
       }
     }
     Views: {

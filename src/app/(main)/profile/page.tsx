@@ -128,7 +128,7 @@ function ProfileForm({ user }: { user: any }) {
           department: department || null,
           programmes: programme ? [programme] : null,
           level: level || null,
-        })
+        } as any)
         .eq('id', profile.id)
       if (error) throw error
       setToast({ type: 'success', text: 'Profile updated successfully.' })

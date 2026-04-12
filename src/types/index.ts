@@ -1,6 +1,6 @@
 export type UserRole = 'student' | 'lecturer' | 'class_rep' | 'admin' | 'librarian';
 
-export type FileType = 'PDF' | 'DOCX' | 'PPTX' | 'PNG' | 'JPG' | 'TXT';
+export type FileType = 'PDF' | 'DOCX' | 'PPTX' | 'PNG' | 'JPG' | 'JPEG' | 'TXT';
 
 export type Semester = 'First' | 'Second';
 
