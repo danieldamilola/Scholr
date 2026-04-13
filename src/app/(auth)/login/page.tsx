@@ -31,15 +31,21 @@ export default function LoginPage() {
     setLoginError('')
     try {
       const supabase = createClientSingleton()
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setLoginError(error.message)
-      else router.push('/dashboard')
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setLoginError(error.message)
+      } else if (data.session) {
+        // Hard redirect ensures the session is fully persisted before the
+        // next page mounts and AuthGuard checks it (prevents redirect loop on Netlify)
+        window.location.href = '/dashboard'
+      }
     } catch {
       setLoginError('An unexpected error occurred')
     } finally {
       setLoginLoading(false)
     }
   }
+
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()
