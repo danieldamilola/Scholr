@@ -1,6 +1,14 @@
 import Groq from 'groq-sdk'
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+// Lazy getter — only instantiated at runtime, not during build-time module evaluation.
+// This prevents "GROQ_API_KEY missing" errors when the deployment platform builds the app.
+let _groq: Groq | null = null
+function getGroq(): Groq {
+  if (!_groq) {
+    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+  }
+  return _groq
+}
 
 const MODEL = 'llama-3.3-70b-versatile'
 const MAX_CONTEXT = 12000 // Groq has token limits; keep context manageable
@@ -42,7 +50,7 @@ ${truncated}
     { role: 'user', content: question },
   ]
 
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: MODEL,
     messages,
     temperature: 0.4,
