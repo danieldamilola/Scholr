@@ -30,21 +30,32 @@ export default function LoginPage() {
     setLoginLoading(true)
     setLoginError('')
     try {
+      // DEBUG: Check if env vars are loaded
+      console.log('[Scholr] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅ set' : '❌ MISSING')
+      console.log('[Scholr] ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✅ set' : '❌ MISSING')
+
       const supabase = createClientSingleton()
+      console.log('[Scholr] Attempting login for:', email)
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+      console.log('[Scholr] Login result — error:', error?.message ?? 'none', '| session:', data.session ? '✅' : '❌')
+
       if (error) {
         setLoginError(error.message)
       } else if (data.session) {
-        // Hard redirect ensures the session is fully persisted before the
-        // next page mounts and AuthGuard checks it (prevents redirect loop on Netlify)
         window.location.href = '/dashboard'
+      } else {
+        setLoginError('Login succeeded but no session was returned. Please try again.')
       }
-    } catch {
+    } catch (err) {
+      console.error('[Scholr] Login exception:', err)
       setLoginError('An unexpected error occurred')
     } finally {
       setLoginLoading(false)
     }
   }
+
 
 
   const handleResetPassword = async (e: React.FormEvent) => {
