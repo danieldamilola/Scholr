@@ -40,6 +40,7 @@ export interface Database {
           uploaded_by?: string | null
           uploader_name?: string
           uploader_role?: string
+          material_type?: string | null
           created_at: string
         }
         Insert: Omit<Database['public']['Tables']['files']['Row'], 'id' | 'created_at'>
@@ -119,6 +120,7 @@ export interface Database {
           requester_role: string
           target_role: string
           target_id?: string | null
+          target_name?: string | null
           type: 'file' | 'book' | 'other'
           title: string
           description?: string | null

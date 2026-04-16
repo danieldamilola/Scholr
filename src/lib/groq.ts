@@ -1,23 +1,23 @@
-import Groq from 'groq-sdk'
+import Groq from "groq-sdk";
 
 // Lazy getter — only instantiated at runtime, not during build-time module evaluation.
 // This prevents "GROQ_API_KEY missing" errors when the deployment platform builds the app.
-let _groq: Groq | null = null
+let _groq: Groq | null = null;
 function getGroq(): Groq {
   if (!_groq) {
-    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
   }
-  return _groq
+  return _groq;
 }
 
-const MODEL = 'llama-3.3-70b-versatile'
-const MAX_CONTEXT = 12000 // Groq has token limits; keep context manageable
+const MODEL = "llama-3.3-70b-versatile";
+const MAX_CONTEXT = 12000; // Groq has token limits; keep context manageable
 
 export interface QuizQuestion {
-  question: string
-  options: string[]
-  correctAnswer: number
-  explanation: string
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
 }
 
 /**
@@ -26,9 +26,12 @@ export interface QuizQuestion {
 export async function chatWithFile(
   textContent: string,
   question: string,
-  chatHistory: { role: 'user' | 'assistant'; content: string }[] = []
-): Promise<{ response: string; updatedHistory: { role: 'user' | 'assistant'; content: string }[] }> {
-  const truncated = textContent.slice(0, MAX_CONTEXT)
+  chatHistory: { role: "user" | "assistant"; content: string }[] = [],
+): Promise<{
+  response: string;
+  updatedHistory: { role: "user" | "assistant"; content: string }[];
+}> {
+  const truncated = textContent.slice(0, MAX_CONTEXT);
 
   const systemPrompt = `You are a helpful academic assistant for the Scholr study platform. You help students understand their course materials.
 
@@ -41,31 +44,34 @@ Rules:
 Document content:
 """
 ${truncated}
-"""`
+"""`;
 
-  const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
-    { role: 'system', content: systemPrompt },
-    // Include last 6 messages of history for context
-    ...chatHistory.slice(-6),
-    { role: 'user', content: question },
-  ]
+  const messages: { role: "system" | "user" | "assistant"; content: string }[] =
+    [
+      { role: "system", content: systemPrompt },
+      // Include last 6 messages of history for context
+      ...chatHistory.slice(-6),
+      { role: "user", content: question },
+    ];
 
   const completion = await getGroq().chat.completions.create({
     model: MODEL,
     messages,
     temperature: 0.4,
     max_tokens: 1024,
-  })
+  });
 
-  const response = completion.choices[0]?.message?.content ?? 'Sorry, I could not generate a response.'
+  const response =
+    completion.choices[0]?.message?.content ??
+    "Sorry, I could not generate a response.";
 
-  const updatedHistory: { role: 'user' | 'assistant'; content: string }[] = [
+  const updatedHistory: { role: "user" | "assistant"; content: string }[] = [
     ...chatHistory,
-    { role: 'user', content: question },
-    { role: 'assistant', content: response },
-  ]
+    { role: "user", content: question },
+    { role: "assistant", content: response },
+  ];
 
-  return { response, updatedHistory }
+  return { response, updatedHistory };
 }
 
 /**
@@ -73,14 +79,16 @@ ${truncated}
  */
 export async function generateQuiz(
   textContent: string,
-  questionCount: number = 5
+  questionCount: number = 5,
+  difficulty: string = "Medium",
 ): Promise<{ questions: QuizQuestion[] }> {
-  const truncated = textContent.slice(0, MAX_CONTEXT)
+  const truncated = textContent.slice(0, MAX_CONTEXT);
 
-  const prompt = `You are an expert educator. Based on the course material below, generate exactly ${questionCount} multiple-choice quiz questions.
+  const prompt = `You are an expert educator. Based on the course material below, generate exactly ${questionCount} ${difficulty.toLowerCase()}-difficulty multiple-choice quiz questions.
 
 Requirements:
 - Each question must test understanding of a key concept from the material.
+- The difficulty level is ${difficulty}: Easy = straightforward recall questions, Medium = conceptual questions, Hard = analytical and application questions.
 - Each question must have exactly 4 answer options.
 - Only ONE option is correct.
 - The correctAnswer field is the 0-based index of the correct option.
@@ -102,31 +110,31 @@ Return this exact JSON structure:
       "explanation": "Explanation of why Option A is correct."
     }
   ]
-}`
+}`;
 
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
+    messages: [{ role: "user", content: prompt }],
     temperature: 0.3,
     max_tokens: 2048,
-    response_format: { type: 'json_object' },
-  })
+    response_format: { type: "json_object" },
+  });
 
-  const raw = completion.choices[0]?.message?.content ?? ''
+  const raw = completion.choices[0]?.message?.content ?? "";
 
-  let quizData: { questions: QuizQuestion[] }
+  let quizData: { questions: QuizQuestion[] };
   try {
-    quizData = JSON.parse(raw)
+    quizData = JSON.parse(raw);
   } catch {
     // Fallback: try to extract JSON block
-    const match = raw.match(/\{[\s\S]*\}/)
-    if (!match) throw new Error('Failed to parse quiz response from AI.')
-    quizData = JSON.parse(match[0])
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error("Failed to parse quiz response from AI.");
+    quizData = JSON.parse(match[0]);
   }
 
   if (!quizData.questions || !Array.isArray(quizData.questions)) {
-    throw new Error('AI returned an invalid quiz format.')
+    throw new Error("AI returned an invalid quiz format.");
   }
 
-  return quizData
+  return quizData;
 }

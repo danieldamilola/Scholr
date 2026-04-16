@@ -14,6 +14,7 @@ export interface Request {
   requester_role: string
   target_role: string
   target_id: string | null
+  target_name: string | null
   type: RequestType
   title: string
   description: string | null
@@ -29,6 +30,8 @@ export interface Request {
 
 export interface CreateRequestPayload {
   target_role: string
+  target_id?: string | null
+  target_name?: string | null
   type: RequestType
   title: string
   description?: string
@@ -50,35 +53,43 @@ export function useRequests() {
     if (!user?.session?.user?.id || !user?.profile) return
     setLoading(true)
     setError(null)
+
+    const userId   = user.session.user.id
+    const role     = user.profile.role
+    const staffRoles = ['admin', 'lecturer', 'class_rep', 'librarian']
+    const isStaff  = staffRoles.includes(role)
+
     try {
-      // My submitted requests
-      const { data: mine, error: mineErr } = await supabase
-        .from('requests')
-        .select('*')
-        .eq('requester_id', user.session.user.id)
-        .order('created_at', { ascending: false })
-
-      if (mineErr) throw mineErr
-      setMyRequests((mine as Request[]) || [])
-
-      // Incoming requests (staff only)
-      const staffRoles = ['admin', 'lecturer', 'class_rep', 'librarian']
-      if (staffRoles.includes(user.profile.role)) {
-        const { data: incoming, error: inErr } = await supabase
+      // Run both queries in parallel instead of one-after-the-other
+      const [mineResult, incomingResult] = await Promise.all([
+        supabase
           .from('requests')
           .select('*')
-          .eq('target_role', user.profile.role)
-          .order('created_at', { ascending: false })
+          .eq('requester_id', userId)
+          .order('created_at', { ascending: false }),
 
-        if (inErr) throw inErr
-        setIncomingRequests((incoming as Request[]) || [])
-      }
+        isStaff
+          ? supabase
+              .from('requests')
+              .select('*')
+              .eq('target_role', role)
+              .or(`target_id.is.null,target_id.eq.${userId}`)
+              .order('created_at', { ascending: false })
+          : Promise.resolve({ data: [], error: null }),
+      ])
+
+      if (mineResult.error)     throw mineResult.error
+      if (incomingResult.error) throw incomingResult.error
+
+      setMyRequests((mineResult.data as Request[]) || [])
+      setIncomingRequests((incomingResult.data as Request[]) || [])
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load requests')
     } finally {
       setLoading(false)
     }
   }, [user?.session?.user?.id, user?.profile?.role])
+
 
   useEffect(() => {
     fetchRequests()
@@ -91,7 +102,7 @@ export function useRequests() {
       requester_name: user.profile.full_name,
       requester_role: user.profile.role,
       ...payload,
-    })
+    } as any)
     if (error) throw error
     await fetchRequests()
   }
@@ -111,8 +122,7 @@ export function useRequests() {
       .single()
     if (fetchErr) throw fetchErr
 
-    const { error: updateErr } = await supabase
-      .from('requests')
+    const { error: updateErr } = await (supabase.from('requests') as any)
       .update({
         status,
         response_message: message || null,
@@ -122,13 +132,15 @@ export function useRequests() {
       .eq('id', requestId)
     if (updateErr) throw updateErr
 
+
     // Send notification to the requester
     const statusLabel = status === 'approved' ? 'approved ✅' : 'denied ❌'
+    const reqData = req as any
     await supabase.from('notifications').insert({
-      user_id: req.requester_id,
-      message: `Your request for "${req.title}" has been ${statusLabel} by ${user.profile.full_name}.${message ? ` Message: "${message}"` : ''}`,
+      user_id: reqData.requester_id,
+      message: `Your request for "${reqData.title}" has been ${statusLabel} by ${user.profile.full_name}.${message ? ` Message: "${message}"` : ''}`,
       link: '/requests',
-    })
+    } as any)
 
     await fetchRequests()
   }

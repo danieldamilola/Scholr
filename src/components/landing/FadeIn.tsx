@@ -1,43 +1,45 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 
 interface FadeInProps {
   children: React.ReactNode
+  delay?: number
   className?: string
-  delay?: number   // ms
-  once?: boolean   // only fire once (default true)
 }
 
-export function FadeIn({ children, className = '', delay = 0, once = true }: FadeInProps) {
+export function FadeIn({ children, delay = 0, className }: FadeInProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
 
-    // Apply delay via inline style
-    if (delay) el.style.transitionDelay = `${delay}ms`
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add('is-visible')
-          if (once) observer.unobserve(el)
-        } else if (!once) {
-          el.classList.remove('is-visible')
+          setIsVisible(true)
+          observer.disconnect()
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     )
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [delay, once])
+  }, [])
 
   return (
-    <div ref={ref} className={`scroll-fade ${className}`}>
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 16 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      transition={{ duration: 0.45, ease: 'easeOut', delay: delay / 1000 }}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }

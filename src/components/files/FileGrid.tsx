@@ -14,6 +14,8 @@ interface FileGridProps {
   onPageChange?: (page: number) => void
   bookmarkedFileIds?: Set<string>
   onBookmarkToggle?: (fileId: string) => void
+  emptyMessage?: string
+  emptySubMessage?: string
 }
 
 export function FileGrid({
@@ -26,6 +28,8 @@ export function FileGrid({
   onPageChange,
   bookmarkedFileIds = new Set(),
   onBookmarkToggle,
+  emptyMessage = 'No files found',
+  emptySubMessage = 'Try adjusting your filters or search terms',
 }: FileGridProps) {
   const totalPages = Math.ceil(total / pageSize)
 
@@ -45,8 +49,8 @@ export function FileGrid({
     return (
       <EmptyState
         icon={FileText}
-        heading="No files found"
-        subtext="Try adjusting your filters or search terms"
+        heading={emptyMessage}
+        subtext={emptySubMessage}
       />
     )
   }

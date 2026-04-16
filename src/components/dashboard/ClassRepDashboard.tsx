@@ -14,7 +14,7 @@ import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton'
 
 export function ClassRepDashboard() {
   const { user } = useUser()
-  const { data: recentFiles, loading: filesLoading } = useFiles({ page: 1, sortBy: 'newest' })
+  const { data: recentFiles, loading: filesLoading } = useFiles({ page: 1, sortBy: 'newest', materialType: 'course_material' })
   const { bookmarkedFileIds } = useBookmarks()
   const { unreadCount } = useNotifications()
 

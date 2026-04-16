@@ -18,6 +18,8 @@ interface FilterPanelProps {
   onProgrammeChange: (value: string) => void
   onLevelChange: (value: string) => void
   onSemesterChange: (value: string) => void
+  sortBy?: 'newest' | 'most_downloaded'
+  onSortByChange?: (value: 'newest' | 'most_downloaded') => void
 }
 
 export function FilterPanel({
@@ -31,6 +33,8 @@ export function FilterPanel({
   onProgrammeChange,
   onLevelChange,
   onSemesterChange,
+  sortBy,
+  onSortByChange,
 }: FilterPanelProps) {
   const availableDepartments = college ? DEPARTMENTS[college as keyof typeof DEPARTMENTS] || [] : []
   const availableProgrammes = department ? PROGRAMMES[department as keyof typeof PROGRAMMES] || [] : []
@@ -101,6 +105,18 @@ export function FilterPanel({
           ))}
         </SelectContent>
       </Select>
+
+      {onSortByChange && (
+        <Select value={sortBy ?? 'newest'} onValueChange={(v) => onSortByChange(v as 'newest' | 'most_downloaded')}>
+          <SelectTrigger className="w-[160px] bg-white border-zinc-200">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest first</SelectItem>
+            <SelectItem value="most_downloaded">Most downloaded</SelectItem>
+          </SelectContent>
+        </Select>
+      )}
     </div>
   )
 }
