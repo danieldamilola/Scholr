@@ -114,7 +114,7 @@ function AiChatPanel({
       const res = await fetch("/api/ai/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ textContent, question: q, chatHistory }),
+        body: JSON.stringify({ fileId, question: q, chatHistory }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to get response");
@@ -164,6 +164,12 @@ function AiChatPanel({
                 ? "Ask anything about this document — summaries, explanations, key concepts."
                 : "AI features are only available for text-based PDF files."}
             </p>
+            {textContent && (
+              <p className="text-[11px] text-zinc-300 max-w-[220px] mt-3 leading-relaxed">
+                AI answers are based on the document content and may not always
+                be accurate. Verify important information.
+              </p>
+            )}
           </div>
         )}
 
@@ -242,7 +248,13 @@ function AiChatPanel({
 // ─────────────────────────────────────────────────────────────
 // QUIZ PANEL
 // ─────────────────────────────────────────────────────────────
-function QuizPanel({ textContent }: { textContent: string | null }) {
+function QuizPanel({
+  textContent,
+  fileId,
+}: {
+  textContent: string | null;
+  fileId: string;
+}) {
   const [quizState, setQuizState] = useState<QuizState>("idle");
   const [questionCount, setQuestionCount] = useState(5);
   const [difficulty, setDifficulty] = useState("Medium");
@@ -262,7 +274,7 @@ function QuizPanel({ textContent }: { textContent: string | null }) {
       const res = await fetch("/api/ai/quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ textContent, questionCount, difficulty }),
+        body: JSON.stringify({ fileId, questionCount, difficulty }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to generate quiz");
@@ -992,7 +1004,10 @@ export default function FileDetailPage() {
               fileId={fileId}
             />
           ) : (
-            <QuizPanel textContent={file.text_content ?? null} />
+            <QuizPanel
+              textContent={file.text_content ?? null}
+              fileId={fileId}
+            />
           )}
         </div>
       </aside>
@@ -1017,7 +1032,10 @@ export default function FileDetailPage() {
                 fileId={fileId}
               />
             ) : (
-              <QuizPanel textContent={file.text_content ?? null} />
+              <QuizPanel
+                textContent={file.text_content ?? null}
+                fileId={fileId}
+              />
             )}
           </div>
         </SheetContent>

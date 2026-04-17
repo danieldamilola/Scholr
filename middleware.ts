@@ -1,67 +1,75 @@
-import { createClient } from '@supabase/supabase-js'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import type { Database } from './src/lib/supabase/client'
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createClient<Database>(
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      global: {
-        headers: {
-          Authorization: request.headers.get('authorization') ?? '',
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options),
+          );
         },
       },
-    }
-  )
+    },
+  );
 
-  // Refresh session if expired - required for Server Components
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // Route protection based on ARCHITECTURE.md rules
-  const { pathname } = request.nextUrl
+  const { pathname } = request.nextUrl;
 
-  // Protected routes that require authentication
   const protectedRoutes = [
-    '/dashboard',
-    '/browse',
-    '/file',
-    '/library',
-    '/upload',
-    '/manage',
-    '/bookmarks',
-    '/notifications',
-    '/profile',
-  ]
+    "/dashboard",
+    "/browse",
+    "/file",
+    "/library",
+    "/upload",
+    "/manage",
+    "/manage-books",
+    "/bookmarks",
+    "/notifications",
+    "/profile",
+    "/admin",
+    "/requests",
+    "/past-questions",
+  ];
 
-  // Check if current path is protected
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+  const authRoutes = ["/login", "/signup"];
 
-  // Redirect unauthenticated users from protected routes to login
-  if (isProtectedRoute && !session) {
-    const redirectUrl = new URL('/login', request.url)
-    return NextResponse.redirect(redirectUrl)
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
+  if (isProtectedRoute && !user) {
+    const redirectUrl = new URL("/login", request.url);
+    redirectUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
-  // For admin routes, we'll let the RoleGuard component handle role-based access
-  // The middleware just ensures the user is authenticated
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
-  return res
+  return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - /api (API routes)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|api).*)',
+    "/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};

@@ -85,12 +85,10 @@ export default function AdminPage() {
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("files").select("*", { count: "exact", head: true }),
         supabase.from("books").select("*", { count: "exact", head: true }),
-        supabase.from("files").select("downloads"),
+        supabase.from("files").select("downloads.sum()"),
       ]);
-      const totalDownloads = (dlData ?? []).reduce(
-        (sum: number, f: { downloads: number }) => sum + (f.downloads || 0),
-        0,
-      );
+      const totalDownloads =
+        (dlData as { sum: number }[] | null)?.[0]?.sum ?? 0;
       setStats({
         users: usersCount || 0,
         files: filesCount || 0,
@@ -124,13 +122,13 @@ export default function AdminPage() {
     if (!deletingUserId) return;
     setIsDeleting(true);
     try {
-      const supabase = createClientSingleton();
-      // Delete profile (cascade should handle auth.users if set up in Supabase)
-      const { error } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("id", deletingUserId);
-      if (error) throw error;
+      const res = await fetch("/api/admin/delete-user", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: deletingUserId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete user");
       setUsers((prev) => prev.filter((u) => u.id !== deletingUserId));
       setStats((prev) => ({ ...prev, users: prev.users - 1 }));
     } catch (error) {

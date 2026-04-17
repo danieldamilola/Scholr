@@ -12,7 +12,7 @@ CREATE TABLE profiles (
   id            UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name     TEXT NOT NULL,
   email         TEXT NOT NULL,
-  role          TEXT NOT NULL CHECK (role IN ('student', 'lecturer', 'class_rep', 'admin')),
+  role          TEXT NOT NULL CHECK (role IN ('student', 'lecturer', 'class_rep', 'librarian', 'admin')),
   college       TEXT,
   department    TEXT,
   programme     TEXT,
@@ -170,7 +170,7 @@ CREATE POLICY "books_insert_uploader"
   ON books FOR INSERT TO authenticated
   WITH CHECK (
     auth.uid() = uploaded_by AND
-    (SELECT role FROM profiles WHERE id = auth.uid()) IN ('lecturer', 'class_rep', 'admin')
+    (SELECT role FROM profiles WHERE id = auth.uid()) IN ('librarian', 'admin')
   );
 CREATE POLICY "books_update_own"
   ON books FOR UPDATE TO authenticated USING (auth.uid() = uploaded_by);

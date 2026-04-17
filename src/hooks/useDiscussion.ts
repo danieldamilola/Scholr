@@ -50,7 +50,7 @@ export function useDiscussion({ fileId }: UseDiscussionParams) {
               profiles:user_id (id, full_name, avatar_url)
             `,
             )
-            .eq("thread_id", thread.id)
+            .eq("thread_id", thread.id as string)
             .order("created_at", { ascending: true });
 
           if (repliesError) throw repliesError;
@@ -68,7 +68,9 @@ export function useDiscussion({ fileId }: UseDiscussionParams) {
         }),
       );
 
-      setThreads(threadsWithReplies);
+      setThreads(
+        threadsWithReplies as unknown as DiscussionThreadWithReplies[],
+      );
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to fetch discussions",

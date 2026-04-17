@@ -1,8 +1,8 @@
-import type { FileRecord } from '@/types'
-import { Download, Calendar, User, FileText } from 'lucide-react'
+import type { FileRecord } from "@/types";
+import { Download, Calendar, User, FileText } from "lucide-react";
 
 interface FileDetailProps {
-  file: FileRecord
+  file: FileRecord;
 }
 
 export function FileDetail({ file }: FileDetailProps) {
@@ -10,7 +10,9 @@ export function FileDetail({ file }: FileDetailProps) {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-zinc-900 mb-2">{file.title}</h1>
-        <p className="text-zinc-500">{file.description || 'No description provided'}</p>
+        <p className="text-zinc-500">
+          {file.description || "No description provided"}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -18,17 +20,23 @@ export function FileDetail({ file }: FileDetailProps) {
           <div className="flex items-center gap-2 text-sm">
             <FileText className="size-4 text-zinc-400" />
             <span className="text-zinc-600">Course Code:</span>
-            <span className="font-medium text-zinc-900">{file.course_code}</span>
+            <span className="font-medium text-zinc-900">
+              {file.course_code}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <User className="size-4 text-zinc-400" />
             <span className="text-zinc-600">Uploaded by:</span>
-            <span className="font-medium text-zinc-900">{file.uploader_name || 'Unknown'}</span>
+            <span className="font-medium text-zinc-900">
+              {file.uploader_name || "Unknown"}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <FileText className="size-4 text-zinc-400" />
             <span className="text-zinc-600">Role:</span>
-            <span className="font-medium text-zinc-900">{file.uploader_role || 'Unknown'}</span>
+            <span className="font-medium text-zinc-900">
+              {file.uploader_role || "Unknown"}
+            </span>
           </div>
         </div>
 
@@ -54,7 +62,9 @@ export function FileDetail({ file }: FileDetailProps) {
       </div>
 
       <div className="border-t border-zinc-200 pt-4">
-        <h3 className="text-sm font-semibold text-zinc-900 mb-3">Academic Information</h3>
+        <h3 className="text-sm font-semibold text-zinc-900 mb-3">
+          Academic Information
+        </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
             <span className="text-zinc-600 block">College</span>
@@ -66,7 +76,9 @@ export function FileDetail({ file }: FileDetailProps) {
           </div>
           <div>
             <span className="text-zinc-600 block">Programme</span>
-            <span className="font-medium text-zinc-900">{file.programme}</span>
+            <span className="font-medium text-zinc-900">
+              {file.programmes?.[0]}
+            </span>
           </div>
           <div>
             <span className="text-zinc-600 block">Level</span>
@@ -91,5 +103,5 @@ export function FileDetail({ file }: FileDetailProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
