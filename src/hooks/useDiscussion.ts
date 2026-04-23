@@ -17,6 +17,18 @@ export function useDiscussion({ fileId }: UseDiscussionParams) {
   const [threads, setThreads] = useState<DiscussionThreadWithReplies[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClientSingleton();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setCurrentUserId(user?.id ?? null);
+    };
+    fetchUser();
+  }, []);
 
   const fetchThreads = useCallback(async () => {
     setLoading(true);
@@ -139,6 +151,38 @@ export function useDiscussion({ fileId }: UseDiscussionParams) {
     }
   };
 
+  const deleteThread = async (threadId: string) => {
+    try {
+      const supabase = createClientSingleton();
+      const { error } = await supabase
+        .from("discussion_threads")
+        .delete()
+        .eq("id", threadId);
+
+      if (error) throw error;
+
+      await fetchThreads();
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const deleteReply = async (replyId: string) => {
+    try {
+      const supabase = createClientSingleton();
+      const { error } = await supabase
+        .from("discussion_replies")
+        .delete()
+        .eq("id", replyId);
+
+      if (error) throw error;
+
+      await fetchThreads();
+    } catch (err) {
+      throw err;
+    }
+  };
+
   const markReplyAsHelpful = async (replyId: string, isHelpful: boolean) => {
     try {
       const supabase = createClientSingleton();
@@ -164,8 +208,11 @@ export function useDiscussion({ fileId }: UseDiscussionParams) {
     threads,
     loading,
     error,
+    currentUserId,
     createThread,
     createReply,
+    deleteThread,
+    deleteReply,
     markReplyAsHelpful,
     refetch: fetchThreads,
   };

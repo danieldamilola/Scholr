@@ -491,9 +491,35 @@ function DiscussionPanel({ fileId }: { fileId: string }) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [isReplying, setIsReplying] = useState(false);
-  const { threads, loading, createThread, createReply } = useDiscussion({
+  const {
+    threads,
+    loading,
+    createThread,
+    createReply,
+    deleteThread,
+    deleteReply,
+    currentUserId,
+  } = useDiscussion({
     fileId,
   });
+
+  const handleDeleteThread = async (threadId: string) => {
+    if (!confirm("Delete this thread and all its replies?")) return;
+    try {
+      await deleteThread(threadId);
+    } catch {
+      alert("Failed to delete thread. Please try again.");
+    }
+  };
+
+  const handleDeleteReply = async (replyId: string) => {
+    if (!confirm("Delete this reply?")) return;
+    try {
+      await deleteReply(replyId);
+    } catch {
+      alert("Failed to delete reply. Please try again.");
+    }
+  };
 
   const handlePost = async () => {
     if (!newThread.trim() || isSubmitting) return;
@@ -625,6 +651,15 @@ function DiscussionPanel({ fileId }: { fileId: string }) {
                     <CornerDownRight className="size-3.5" />
                     Reply
                   </button>
+                  {currentUserId === thread.user_id && (
+                    <button
+                      onClick={() => handleDeleteThread(thread.id)}
+                      className="flex items-center gap-1.5 text-[12px] font-medium text-zinc-400 hover:text-red-500 transition-colors"
+                    >
+                      <Trash2 className="size-3.5" />
+                      Delete
+                    </button>
+                  )}
                 </div>
 
                 {/* Inline reply compose */}
@@ -692,6 +727,15 @@ function DiscussionPanel({ fileId }: { fileId: string }) {
                             <p className="text-[14px] text-zinc-700 leading-relaxed">
                               {reply.content}
                             </p>
+                            {currentUserId === reply.user_id && (
+                              <button
+                                onClick={() => handleDeleteReply(reply.id)}
+                                className="flex items-center gap-1 mt-1 text-[11px] font-medium text-zinc-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="size-3" />
+                                Delete
+                              </button>
+                            )}
                           </div>
                         </div>
                       ),
