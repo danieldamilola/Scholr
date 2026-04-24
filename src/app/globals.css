@@ -2,7 +2,23 @@
 
 @import "tailwindcss";
 
+/* ── Class-based dark mode for Tailwind v4 ── */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
+    /* ── Replace blue with teal palette ── */
+    --color-blue-50: #e8f5f0;
+    --color-blue-100: #c5e8d8;
+    --color-blue-200: #9dd4bb;
+    --color-blue-300: #70bc9e;
+    --color-blue-400: #4da884;
+    --color-blue-500: #408a71;
+    --color-blue-600: #408a71;
+    --color-blue-700: #285a48;
+    --color-blue-800: #1a3d30;
+    --color-blue-900: #102820;
+
+    /* ── Light mode semantic colors ── */
     --color-background: 0 0% 100%;
     --color-foreground: 240 10% 3.9%;
     --color-card: 0 0% 100%;
@@ -27,28 +43,30 @@
     --radius-lg: 0.75rem;
 }
 
-@media (prefers-color-scheme: dark) {
-    @theme {
-        --color-background: 240 10% 3.9%;
-        --color-foreground: 0 0% 98%;
-        --color-card: 240 10% 3.9%;
-        --color-card-foreground: 0 0% 98%;
-        --color-popover: 240 10% 3.9%;
-        --color-popover-foreground: 0 0% 98%;
-        --color-primary: 0 0% 98%;
-        --color-primary-foreground: 240 5.9% 10%;
-        --color-secondary: 240 3.7% 15.9%;
-        --color-secondary-foreground: 0 0% 98%;
-        --color-muted: 240 3.7% 15.9%;
-        --color-muted-foreground: 240 5% 64.9%;
-        --color-accent: 240 3.7% 15.9%;
-        --color-accent-foreground: 0 0% 98%;
-        --color-destructive: 0 62.8% 30.6%;
-        --color-destructive-foreground: 0 0% 98%;
-        --color-border: 240 3.7% 15.9%;
-        --color-input: 240 3.7% 15.9%;
-        --color-ring: 240 4.9% 83.9%;
-    }
+/* ── Dark mode: flip zinc scale to teal-dark palette ── */
+.dark {
+    color-scheme: dark;
+
+    --color-zinc-50: #091413;
+    --color-zinc-100: #0f1e1c;
+    --color-zinc-200: #1a3530;
+    --color-zinc-300: #285a48;
+    --color-zinc-400: #408a71;
+    --color-zinc-500: #5aaa8c;
+    --color-zinc-600: #7ec4a8;
+    --color-zinc-700: #a8d9c8;
+    --color-zinc-800: #c8ecdf;
+    --color-zinc-900: #e8f7f2;
+}
+
+/* ── Dark mode: bg-white → dark card surface ── */
+/* This overrides Tailwind's layered utility since this rule is unlayered */
+.dark .bg-white {
+    background-color: #0f1e1c;
+}
+
+.dark .border-white {
+    border-color: #1a3530;
 }
 
 @layer base {

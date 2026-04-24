@@ -14,7 +14,10 @@ import {
   ChevronDown,
   User,
   Library,
+  Moon,
+  Sun,
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -54,6 +57,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [uploadMenuOpen, setUploadMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const uploadMenuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -90,7 +94,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="h-14 w-full border-b border-zinc-200 bg-white sticky top-0 z-40">
+    <nav className="h-14 w-full border-b border-zinc-200 bg-white dark:border-zinc-700 sticky top-0 z-40">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/dashboard" className="text-lg font-semibold text-zinc-900">
@@ -149,7 +153,7 @@ export default function Navbar() {
               </button>
 
               {uploadMenuOpen && (
-                <div className="absolute left-0 top-full z-50 mt-1 w-52 rounded-md border border-zinc-200 bg-white py-1 shadow-sm">
+                <div className="absolute left-0 top-full z-50 mt-1 w-52 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 py-1 shadow-sm">
                   {uploadMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
@@ -178,6 +182,20 @@ export default function Navbar() {
             onClick={() => router.push("/notifications")}
           />
 
+          {/* Theme Toggle */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="flex items-center justify-center size-8 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors"
+          >
+            {theme === "dark" ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
+          </button>
+
           {/* User Menu — hidden on mobile */}
           {user?.profile && (
             <div className="hidden md:block relative" ref={userMenuRef}>
@@ -201,7 +219,7 @@ export default function Navbar() {
               </button>
 
               {userMenuOpen && (
-                <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-md border border-zinc-200 bg-white py-1 shadow-sm">
+                <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 py-1 shadow-sm">
                   <div className="px-3 py-2 border-b border-zinc-100">
                     <p className="text-xs font-medium text-zinc-900 truncate">
                       {user.profile.full_name}
@@ -258,7 +276,10 @@ export default function Navbar() {
                 <Menu className="size-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 bg-white p-0">
+            <SheetContent
+              side="right"
+              className="w-72 bg-white dark:bg-zinc-900 p-0"
+            >
               <SheetHeader className="border-b border-zinc-200 px-4 py-4">
                 <SheetTitle className="text-left text-zinc-900">
                   Menu
