@@ -18,7 +18,7 @@ export default function RootLayout({
         {/* Prevent flash of unstyled content on dark mode */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('scholr-theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t===null&&d)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+            __html: `(function(){try{if(localStorage.getItem('scholr-theme')==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
       </head>
