@@ -53,25 +53,23 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
-      <div className="bg-white border border-zinc-200 rounded-md p-8 w-full max-w-sm">
-        <h1 className="text-zinc-900 font-bold text-xl mb-1">Scholr</h1>
-        <p className="text-zinc-400 text-sm mb-6">
+    <main className="min-h-screen flex items-center justify-center bg-page px-4">
+      <div className="bg-surface border border-line rounded-md p-8 w-full max-w-sm">
+        <h1 className="text-ink font-bold text-xl mb-1">Scholr</h1>
+        <p className="text-ink-muted text-sm mb-6">
           Set a new password for your account.
         </p>
 
         {done ? (
           <div className="flex flex-col items-center text-center py-4 space-y-3">
-            <CheckCircle2 className="size-10 text-green-500" />
-            <p className="text-sm font-medium text-zinc-900">
-              Password updated!
-            </p>
-            <p className="text-xs text-zinc-400">
+            <CheckCircle2 className="size-10 text-success" />
+            <p className="text-sm font-medium text-ink">Password updated!</p>
+            <p className="text-xs text-ink-muted">
               Your password has been changed successfully.
             </p>
             <Link
               href="/login"
-              className="mt-2 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+              className="mt-2 text-sm text-brand-muted hover:text-brand transition-colors"
             >
               Sign in with your new password
             </Link>
@@ -86,7 +84,7 @@ export default function ResetPasswordPage() {
 
             {!sessionReady && !error && (
               <div className="flex justify-center py-4">
-                <Loader2 className="size-5 text-zinc-400 animate-spin" />
+                <Loader2 className="size-5 text-ink-muted animate-spin" />
               </div>
             )}
 
@@ -95,7 +93,7 @@ export default function ResetPasswordPage() {
                 <div className="mb-4">
                   <label
                     htmlFor="newPw"
-                    className="block text-zinc-700 text-sm font-medium mb-1"
+                    className="block text-ink-soft text-sm font-medium mb-1"
                   >
                     New Password
                   </label>
@@ -108,12 +106,12 @@ export default function ResetPasswordPage() {
                       placeholder="Minimum 8 characters"
                       required
                       disabled={loading}
-                      className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 pr-10 disabled:opacity-50"
+                      className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3 pr-10 disabled:opacity-50"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-soft"
                     >
                       {showPassword ? (
                         <EyeOff className="size-4" />
@@ -127,7 +125,7 @@ export default function ResetPasswordPage() {
                 <div className="mb-6">
                   <label
                     htmlFor="confirmPw"
-                    className="block text-zinc-700 text-sm font-medium mb-1"
+                    className="block text-ink-soft text-sm font-medium mb-1"
                   >
                     Confirm New Password
                   </label>
@@ -139,14 +137,14 @@ export default function ResetPasswordPage() {
                     placeholder="Re-enter new password"
                     required
                     disabled={loading}
-                    className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 disabled:opacity-50"
+                    className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3 disabled:opacity-50"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading || !password || !confirmPassword}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? (
                     <Loader2 className="size-4 animate-spin" />

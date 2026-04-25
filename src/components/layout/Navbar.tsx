@@ -94,10 +94,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="h-14 w-full border-b border-zinc-200 bg-white dark:border-zinc-700 sticky top-0 z-40">
+    <nav className="h-14 w-full border-b border-border bg-surface dark:bg-frost sticky top-0 z-40">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/dashboard" className="text-lg font-semibold text-zinc-900">
+        <Link href="/dashboard" className="text-lg font-semibold text-ink">
           Scholr
         </Link>
 
@@ -111,7 +111,7 @@ export default function Navbar() {
                 "relative py-4 text-sm transition-colors",
                 pathname === link.href
                   ? "text-blue-600"
-                  : "text-zinc-500 hover:text-zinc-900",
+                  : "text-ink-muted hover:text-ink",
               )}
             >
               {link.label}
@@ -134,7 +134,7 @@ export default function Navbar() {
                     pathname === "/library/upload" ||
                     pathname === "/manage-books"
                     ? "text-blue-600"
-                    : "text-zinc-500 hover:text-zinc-900",
+                    : "text-ink-muted hover:text-ink",
                 )}
               >
                 Upload
@@ -153,7 +153,7 @@ export default function Navbar() {
               </button>
 
               {uploadMenuOpen && (
-                <div className="absolute left-0 top-full z-50 mt-1 w-52 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 py-1 shadow-sm">
+                <div className="absolute left-0 top-full z-50 mt-1 w-52 rounded-md border border-border bg-raised py-1 shadow-sm">
                   {uploadMenuItems.map((item) => {
                     const Icon = item.icon;
                     return (
@@ -161,9 +161,9 @@ export default function Navbar() {
                         key={item.href}
                         href={item.href}
                         onClick={() => setUploadMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink-soft hover:bg-subtle hover:text-ink transition-colors"
                       >
-                        <Icon className="size-4 text-zinc-400" />
+                        <Icon className="size-4 text-ink-muted" />
                         {item.label}
                       </Link>
                     );
@@ -187,7 +187,7 @@ export default function Navbar() {
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
-            className="flex items-center justify-center size-8 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors"
+            className="flex items-center justify-center size-8 rounded-md text-ink-muted hover:text-ink hover:bg-subtle transition-colors"
           >
             {theme === "dark" ? (
               <Sun className="size-4" />
@@ -202,60 +202,60 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-zinc-50"
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-subtle"
               >
-                <div className="flex size-7 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 text-xs font-medium">
+                <div className="flex size-7 items-center justify-center rounded-full bg-subtle text-ink-soft text-xs font-medium">
                   {user.profile.full_name?.charAt(0)?.toUpperCase() || "U"}
                 </div>
-                <span className="text-zinc-900 text-sm">
+                <span className="text-ink text-sm">
                   {user.profile.full_name?.split(" ")[0]}
                 </span>
                 <ChevronDown
                   className={cn(
-                    "size-3.5 text-zinc-400 transition-transform",
+                    "size-3.5 text-ink-muted transition-transform",
                     userMenuOpen && "rotate-180",
                   )}
                 />
               </button>
 
               {userMenuOpen && (
-                <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 py-1 shadow-sm">
-                  <div className="px-3 py-2 border-b border-zinc-100">
-                    <p className="text-xs font-medium text-zinc-900 truncate">
+                <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-md border border-border bg-raised py-1 shadow-sm">
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="text-xs font-medium text-ink truncate">
                       {user.profile.full_name}
                     </p>
-                    <p className="text-xs text-zinc-400 capitalize">
+                    <p className="text-xs text-ink-muted capitalize">
                       {user.profile.role?.replace("_", " ")}
                     </p>
                   </div>
                   <Link
                     href="/profile"
                     onClick={() => setUserMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink-soft hover:bg-subtle hover:text-ink transition-colors"
                   >
-                    <User className="size-4 text-zinc-400" />
-                    Profile & Settings
+                    <User className="size-4 text-ink-muted" />
+                    Profile &amp; Settings
                   </Link>
                   {role === "admin" && (
                     <Link
                       href="/admin"
                       onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2 text-sm text-ink-soft hover:bg-subtle hover:text-ink transition-colors"
                     >
-                      <FileText className="size-4 text-zinc-400" />
+                      <FileText className="size-4 text-ink-muted" />
                       Admin Panel
                     </Link>
                   )}
-                  <div className="border-t border-zinc-100 mt-1 pt-1">
+                  <div className="border-t border-border mt-1 pt-1">
                     <button
                       type="button"
                       onClick={() => {
                         setUserMenuOpen(false);
                         handleLogout();
                       }}
-                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+                      className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-ink-muted hover:bg-subtle hover:text-ink transition-colors"
                     >
-                      <LogOut className="size-4 text-zinc-400" />
+                      <LogOut className="size-4 text-ink-muted" />
                       Log out
                     </button>
                   </div>
@@ -270,7 +270,7 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-zinc-500 hover:text-zinc-900 md:hidden"
+                className="text-ink-muted hover:text-ink md:hidden"
                 aria-label="Open menu"
               >
                 <Menu className="size-5" />
@@ -278,25 +278,23 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-72 bg-white dark:bg-zinc-900 p-0"
+              className="w-72 bg-raised p-0 border-border"
             >
-              <SheetHeader className="border-b border-zinc-200 px-4 py-4">
-                <SheetTitle className="text-left text-zinc-900">
-                  Menu
-                </SheetTitle>
+              <SheetHeader className="border-b border-border px-4 py-4">
+                <SheetTitle className="text-left text-ink">Menu</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col">
                 {/* User Info in Mobile */}
                 {user?.profile && (
-                  <div className="flex items-center gap-2 border-b border-zinc-200 px-4 py-4">
-                    <div className="flex size-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 text-xs font-medium">
+                  <div className="flex items-center gap-2 border-b border-border px-4 py-4">
+                    <div className="flex size-8 items-center justify-center rounded-full bg-subtle text-ink-soft text-xs font-medium">
                       {user.profile.full_name?.charAt(0)?.toUpperCase() || "U"}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-zinc-900">
+                      <p className="text-sm font-medium text-ink">
                         {user.profile.full_name}
                       </p>
-                      <p className="text-xs text-zinc-400 capitalize">
+                      <p className="text-xs text-ink-muted capitalize">
                         {user.profile.role?.replace("_", " ")}
                       </p>
                     </div>
@@ -313,8 +311,8 @@ export default function Navbar() {
                       className={cn(
                         "px-4 py-3 text-sm transition-colors",
                         pathname === link.href
-                          ? "bg-zinc-50 text-blue-600"
-                          : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900",
+                          ? "bg-subtle text-blue-600"
+                          : "text-ink-muted hover:bg-subtle hover:text-ink",
                       )}
                     >
                       {link.label}
@@ -325,7 +323,7 @@ export default function Navbar() {
                   {isUploaderRole && (
                     <>
                       <div className="px-4 pt-4 pb-1">
-                        <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide">
+                        <p className="text-ink-muted text-xs font-medium uppercase tracking-wide">
                           Upload
                         </p>
                       </div>
@@ -339,8 +337,8 @@ export default function Navbar() {
                             className={cn(
                               "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                               pathname === item.href.split("?")[0]
-                                ? "bg-zinc-50 text-blue-600"
-                                : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900",
+                                ? "bg-subtle text-blue-600"
+                                : "text-ink-muted hover:bg-subtle hover:text-ink",
                             )}
                           >
                             <Icon className="size-4" />
@@ -354,7 +352,7 @@ export default function Navbar() {
                   {isLibrarian && (
                     <>
                       <div className="px-4 pt-4 pb-1">
-                        <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide">
+                        <p className="text-ink-muted text-xs font-medium uppercase tracking-wide">
                           Library
                         </p>
                       </div>
@@ -368,8 +366,8 @@ export default function Navbar() {
                             className={cn(
                               "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                               pathname === item.href
-                                ? "bg-zinc-50 text-blue-600"
-                                : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900",
+                                ? "bg-subtle text-blue-600"
+                                : "text-ink-muted hover:bg-subtle hover:text-ink",
                             )}
                           >
                             <Icon className="size-4" />
@@ -382,7 +380,7 @@ export default function Navbar() {
 
                   {/* Profile link */}
                   <div className="px-4 pt-4 pb-1">
-                    <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide">
+                    <p className="text-ink-muted text-xs font-medium uppercase tracking-wide">
                       Account
                     </p>
                   </div>
@@ -392,24 +390,24 @@ export default function Navbar() {
                     className={cn(
                       "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                       pathname === "/profile"
-                        ? "bg-zinc-50 text-blue-600"
-                        : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900",
+                        ? "bg-subtle text-blue-600"
+                        : "text-ink-muted hover:bg-subtle hover:text-ink",
                     )}
                   >
                     <User className="size-4" />
-                    Profile & Settings
+                    Profile &amp; Settings
                   </Link>
                 </div>
 
                 {/* Logout */}
-                <div className="border-t border-zinc-200 px-4 py-4">
+                <div className="border-t border-border px-4 py-4">
                   <button
                     type="button"
                     onClick={() => {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="flex w-full items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-900"
+                    className="flex w-full items-center gap-2 text-sm text-ink-muted transition-colors hover:text-ink"
                   >
                     <LogOut className="size-4" />
                     Log out

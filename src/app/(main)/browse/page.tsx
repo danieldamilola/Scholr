@@ -83,10 +83,10 @@ export default function BrowsePage() {
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-10">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900 mb-2">Browse Files</h1>
-        <p className="text-zinc-500">
+        <h1 className="text-2xl font-semibold text-ink mb-2">Browse Files</h1>
+        <p className="text-sm text-ink-muted">
           Search and filter course materials by college, department, programme,
           and level.
         </p>
@@ -116,7 +116,7 @@ export default function BrowsePage() {
 
         {/* Sort Options */}
         <div className="flex items-center justify-between">
-          <span className="text-sm text-zinc-500">
+          <span className="text-sm text-ink-muted">
             {total} {total === 1 ? "file" : "files"} found
           </span>
           <select
@@ -124,7 +124,7 @@ export default function BrowsePage() {
             onChange={(e) =>
               handleSortChange(e.target.value as "newest" | "most_downloaded")
             }
-            className="border border-zinc-200 rounded-md text-sm text-zinc-700 px-3 py-2 bg-white"
+            className="border border-border rounded-md text-sm text-ink-soft px-3 py-2 bg-surface focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent transition-shadow"
           >
             <option value="newest">Newest First</option>
             <option value="most_downloaded">Most Downloaded</option>

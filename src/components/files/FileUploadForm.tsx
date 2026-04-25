@@ -34,9 +34,9 @@ type FormErrors = {
 };
 
 const inputCls =
-  "bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 disabled:opacity-50 disabled:cursor-not-allowed";
+  "bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3 disabled:opacity-50 disabled:cursor-not-allowed";
 
-const labelCls = "block text-zinc-700 text-sm font-medium mb-1";
+const labelCls = "block text-ink-soft text-sm font-medium mb-1";
 
 export function FileUploadForm() {
   const { user } = useUser();
@@ -266,7 +266,7 @@ export function FileUploadForm() {
       )}
 
       {success && (
-        <div className="flex items-center gap-2 rounded-md bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
+        <div className="flex items-center gap-2 rounded-md bg-success-bg border border-success px-4 py-3 text-sm text-success-text">
           <CheckCircle2 className="size-4 shrink-0" />
           File uploaded successfully! Text extraction is running in the
           background.
@@ -276,7 +276,7 @@ export function FileUploadForm() {
       {/* Material Type — class_rep gets extra option */}
       {role === "class_rep" && (
         <div>
-          <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-3">
+          <p className="text-ink-muted text-xs font-medium uppercase tracking-wide mb-3">
             Material Type
           </p>
           <div className="flex gap-3">
@@ -285,8 +285,8 @@ export function FileUploadForm() {
               onClick={() => setMaterialType("course_material")}
               className={`flex-1 py-2.5 text-sm font-medium rounded-md border transition-colors ${
                 materialType === "course_material"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-300"
+                  ? "bg-brand text-white border-brand"
+                  : "bg-surface text-ink-soft border-border hover:border-border"
               }`}
             >
               Course Material
@@ -296,8 +296,8 @@ export function FileUploadForm() {
               onClick={() => setMaterialType("past_question")}
               className={`flex-1 py-2.5 text-sm font-medium rounded-md border transition-colors ${
                 materialType === "past_question"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-300"
+                  ? "bg-brand text-white border-brand"
+                  : "bg-surface text-ink-soft border-border hover:border-border"
               }`}
             >
               Past Questions
@@ -307,7 +307,7 @@ export function FileUploadForm() {
       )}
 
       {/* File Details */}
-      <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide">
+      <p className="text-ink-muted text-xs font-medium uppercase tracking-wide">
         File Details
       </p>
 
@@ -360,12 +360,12 @@ export function FileUploadForm() {
           placeholder="Brief description of the file"
           disabled={isLoading}
           rows={3}
-          className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent w-full px-3 py-2 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent w-full px-3 py-2 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
         />
       </div>
 
       {/* Academic Info */}
-      <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide pt-1">
+      <p className="text-ink-muted text-xs font-medium uppercase tracking-wide pt-1">
         Academic Info
       </p>
 
@@ -376,8 +376,8 @@ export function FileUploadForm() {
         disabled={isLoading}
         className={`w-full flex items-center justify-between px-4 py-3 rounded-md border transition-colors text-sm ${
           isGeneral
-            ? "bg-blue-50 border-blue-300 text-blue-700"
-            : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300"
+            ? "bg-brand-wash border-brand/30 text-brand"
+            : "bg-surface border-border text-ink-muted hover:border-border"
         }`}
       >
         <div className="text-left">
@@ -390,10 +390,10 @@ export function FileUploadForm() {
         </div>
         <div
           className={`size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-            isGeneral ? "bg-blue-600 border-blue-600" : "border-zinc-300"
+            isGeneral ? "bg-brand border-brand" : "border-border"
           }`}
         >
-          {isGeneral && <div className="size-2 rounded-full bg-white" />}
+          {isGeneral && <div className="size-2 rounded-full bg-surface" />}
         </div>
       </button>
 
@@ -454,16 +454,16 @@ export function FileUploadForm() {
           <div className="md:col-span-2">
             <label className={labelCls}>
               Programmes *{" "}
-              <span className="font-normal text-zinc-400">
+              <span className="font-normal text-ink-muted">
                 (select all that apply)
               </span>
             </label>
             {!department ? (
-              <p className="text-sm text-zinc-400 italic">
+              <p className="text-sm text-ink-muted italic">
                 Select a department first
               </p>
             ) : availableProgrammes.length === 0 ? (
-              <p className="text-sm text-zinc-400 italic">
+              <p className="text-sm text-ink-muted italic">
                 No programmes available for this department
               </p>
             ) : (
@@ -478,8 +478,8 @@ export function FileUploadForm() {
                       onClick={() => toggleProgramme(p)}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors disabled:opacity-50 ${
                         checked
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400"
+                          ? "bg-brand text-white border-brand"
+                          : "bg-surface text-ink-muted border-border hover:border-border"
                       }`}
                     >
                       {checked && <span>✓</span>}
@@ -576,7 +576,7 @@ export function FileUploadForm() {
       </div>
 
       {/* File Upload */}
-      <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide pt-1">
+      <p className="text-ink-muted text-xs font-medium uppercase tracking-wide pt-1">
         File *
       </p>
 
@@ -590,22 +590,22 @@ export function FileUploadForm() {
         onDrop={handleDrop}
         className={`relative border-2 border-dashed rounded-md p-8 text-center transition-colors ${
           isDragging
-            ? "border-blue-400 bg-blue-50"
+            ? "border-blue-400 bg-brand-wash"
             : file
-              ? "border-zinc-300 bg-zinc-50"
-              : "border-zinc-200 hover:border-zinc-300"
+              ? "border-border bg-subtle"
+              : "border-border hover:border-border"
         }`}
       >
         {file ? (
           <div className="flex items-center justify-center gap-3">
-            <FileText className="size-5 text-zinc-500 shrink-0" />
-            <span className="text-sm text-zinc-700 truncate max-w-xs">
+            <FileText className="size-5 text-ink-muted shrink-0" />
+            <span className="text-sm text-ink-soft truncate max-w-xs">
               {file.name}
             </span>
             <button
               type="button"
               onClick={() => setFile(null)}
-              className="p-1 text-zinc-400 hover:text-zinc-700 transition-colors"
+              className="p-1 text-ink-muted hover:text-ink-soft transition-colors"
               aria-label="Remove file"
             >
               <X className="size-4" />
@@ -614,19 +614,19 @@ export function FileUploadForm() {
         ) : (
           <>
             <Upload
-              className="size-8 text-zinc-300 mx-auto mb-3"
+              className="size-8 text-ink-muted mx-auto mb-3"
               strokeWidth={1.5}
             />
-            <p className="text-sm text-zinc-600 mb-1">
+            <p className="text-sm text-ink-muted mb-1">
               Drag and drop a file here, or{" "}
               <label
                 htmlFor="fileInput"
-                className="text-blue-600 hover:text-blue-700 cursor-pointer font-medium"
+                className="text-brand-muted hover:text-brand cursor-pointer font-medium"
               >
                 browse
               </label>
             </p>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-ink-muted">
               PDF, DOCX, PPTX, PNG, JPG, TXT — max 50MB
             </p>
           </>
@@ -647,7 +647,7 @@ export function FileUploadForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+        className="bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
       >
         {isLoading ? (
           <>

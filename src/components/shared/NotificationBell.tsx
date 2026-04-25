@@ -11,7 +11,7 @@ export function NotificationBell({ count, onClick }: NotificationBellProps) {
     <button
       type="button"
       onClick={onClick}
-      className="relative text-zinc-500 transition-colors hover:text-zinc-900"
+      className="relative text-ink-muted transition-colors hover:text-ink"
       aria-label={`Notifications, ${count} unread`}
     >
       <Bell className="size-5" />

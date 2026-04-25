@@ -42,7 +42,7 @@ export function FilterPanel({
   return (
     <div className="flex flex-wrap gap-3">
       <Select value={college} onValueChange={onCollegeChange}>
-        <SelectTrigger className="w-[180px] bg-white border-zinc-200">
+        <SelectTrigger className="w-[180px] bg-surface border-border">
           <SelectValue placeholder="College" />
         </SelectTrigger>
         <SelectContent>
@@ -55,7 +55,7 @@ export function FilterPanel({
       </Select>
 
       <Select value={department} onValueChange={onDepartmentChange} disabled={!college}>
-        <SelectTrigger className="w-[180px] bg-white border-zinc-200 disabled:opacity-50">
+        <SelectTrigger className="w-[180px] bg-surface border-border disabled:opacity-50">
           <SelectValue placeholder="Department" />
         </SelectTrigger>
         <SelectContent>
@@ -68,7 +68,7 @@ export function FilterPanel({
       </Select>
 
       <Select value={programme} onValueChange={onProgrammeChange} disabled={!department}>
-        <SelectTrigger className="w-[180px] bg-white border-zinc-200 disabled:opacity-50">
+        <SelectTrigger className="w-[180px] bg-surface border-border disabled:opacity-50">
           <SelectValue placeholder="Programme" />
         </SelectTrigger>
         <SelectContent>
@@ -81,7 +81,7 @@ export function FilterPanel({
       </Select>
 
       <Select value={level} onValueChange={onLevelChange}>
-        <SelectTrigger className="w-[120px] bg-white border-zinc-200">
+        <SelectTrigger className="w-[120px] bg-surface border-border">
           <SelectValue placeholder="Level" />
         </SelectTrigger>
         <SelectContent>
@@ -94,7 +94,7 @@ export function FilterPanel({
       </Select>
 
       <Select value={semester} onValueChange={onSemesterChange}>
-        <SelectTrigger className="w-[120px] bg-white border-zinc-200">
+        <SelectTrigger className="w-[120px] bg-surface border-border">
           <SelectValue placeholder="Semester" />
         </SelectTrigger>
         <SelectContent>
@@ -108,7 +108,7 @@ export function FilterPanel({
 
       {onSortByChange && (
         <Select value={sortBy ?? 'newest'} onValueChange={(v) => onSortByChange(v as 'newest' | 'most_downloaded')}>
-          <SelectTrigger className="w-[160px] bg-white border-zinc-200">
+          <SelectTrigger className="w-[160px] bg-surface border-border">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

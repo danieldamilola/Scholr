@@ -5,10 +5,32 @@
 /* ── Class-based dark mode for Tailwind v4 ── */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ─────────────────────────────────────────────────────────────
+   DESIGN TOKENS
+   All semantic custom properties live here.
+   Light values are the defaults; .dark overrides follow below.
+   ───────────────────────────────────────────────────────────── */
 @theme {
-    /* ── Replace blue with teal palette ── */
-    /* blue-600 = #285A48 so white text on buttons passes WCAG AA (~7.5:1) */
-    /* blue-500 = #408A71 reserved for icons, spinners, focus rings          */
+    /* ── Surface / background tokens ── */
+    --color-page: #f9fafb; /* html / page background — darkest layer  */
+    --color-surface: #ffffff; /* cards, panels, navbar                   */
+    --color-surface-raised: #ffffff; /* modals, dropdowns — one step above card */
+    --color-subtle: #f4f4f5; /* hover backgrounds, icon pill fills      */
+    --color-border: #e4e4e7; /* all borders and dividers                */
+
+    /* ── Text tokens ── */
+    --color-ink: #09090b; /* headings, primary text                  */
+    --color-ink-soft: #3f3f46; /* body text, table cells                  */
+    --color-ink-muted: #71717a; /* timestamps, hints, labels               */
+
+    /* ── Brand ── */
+    --color-brand: #285a48;
+    --color-brand-hover: #1a3d30;
+    --color-brand-muted: #408a71;
+    --color-brand-wash: #e6f0ec;
+    --color-brand-wash-text: #285a48;
+
+    /* ── Green scale (maps into Tailwind's blue-* scale for compat) ── */
     --color-blue-50: #e6f0ec;
     --color-blue-100: #c2ddd3;
     --color-blue-200: #9dc4b5;
@@ -20,7 +42,32 @@
     --color-blue-800: #102820;
     --color-blue-900: #091413;
 
-    /* ── Light mode semantic colors ── */
+    /* ── macOS Semantic Colors ── */
+    --color-success: #34c759;
+    --color-success-hover: #2da84e;
+    --color-success-bg: #e8f5e9;
+    --color-success-border: #c8e6c9;
+    --color-success-text: #1b5e20;
+
+    --color-error: #ff3b30;
+    --color-error-hover: #ff453a;
+    --color-error-bg: #ffebee;
+    --color-error-border: #ffcdd2;
+    --color-error-text: #b71c1c;
+
+    --color-warning: #ff9500;
+    --color-warning-hover: #ff9f0a;
+    --color-warning-bg: #fff3e0;
+    --color-warning-border: #ffe0b2;
+    --color-warning-text: #e65100;
+
+    --color-info: #007aff;
+    --color-info-hover: #0a84ff;
+    --color-info-bg: #e3f2fd;
+    --color-info-border: #bbdefb;
+    --color-info-text: #0d47a1;
+
+    /* ── Shadcn/Radix UI tokens (HSL) ── */
     --color-background: 0 0% 100%;
     --color-foreground: 240 10% 3.9%;
     --color-card: 0 0% 100%;
@@ -33,11 +80,11 @@
     --color-secondary-foreground: 240 5.9% 10%;
     --color-muted: 240 4.8% 95.9%;
     --color-muted-foreground: 240 3.8% 46.1%;
-    --color-accent: 240 4.8% 95.9%;
-    --color-accent-foreground: 240 5.9% 10%;
+    --color-shadcn-accent: 240 4.8% 95.9%;
+    --color-shadcn-accent-foreground: 240 5.9% 10%;
     --color-destructive: 0 84.2% 60.2%;
     --color-destructive-foreground: 0 0% 98%;
-    --color-border: 240 5.9% 90%;
+    --color-shadcn-border: 240 5.9% 90%;
     --color-input: 240 5.9% 90%;
     --color-ring: 240 10% 3.9%;
     --radius-sm: 0.375rem;
@@ -45,43 +92,270 @@
     --radius-lg: 0.75rem;
 }
 
-/* ── Dark mode: neutral charcoal zinc scale ── */
-/* Replaces the previous green-tinted scale.    */
-/* Teal accent (#285A48 / #408A71) pops cleanly */
-/* against these neutral dark surfaces.         */
+/* ─────────────────────────────────────────────────────────────
+   DARK MODE OVERRIDES — macOS Dark Mode Inspired
+   ─────────────────────────────────────────────────────────────
+   Philosophy:
+     • Warm, neutral grays instead of cool blue-tinted darks.
+     • Soft, subtle layering — each level rises gently from the
+       one below, just like macOS windows and panels.
+     • Borders are whisper-thin; shadows do the heavy lifting.
+     • Text contrast follows Apple's system hierarchy:
+       – Primary  → pure white   (#ffffff)
+       – Body     → off-white    (#e5e5ea)
+       – Muted    → system gray  (#8e8e93)
+   ───────────────────────────────────────────────────────────── */
 .dark {
     color-scheme: dark;
 
-    --color-zinc-50: #0f1117;
-    --color-zinc-100: #1a1d27;
-    --color-zinc-200: #2a2d3a;
-    --color-zinc-300: #3a3f50;
-    --color-zinc-400: #6b7280;
-    --color-zinc-500: #9ca3af;
-    --color-zinc-600: #b8c0cc;
-    --color-zinc-700: #c9d1d9;
-    --color-zinc-800: #dde4ec;
-    --color-zinc-900: #f0f6fc;
+    /* ── macOS Surface Elevation Ladder ──
+       page   (#1c1c1e)  – deepest background / window chrome
+       └─ surface  (#252527) – cards, panels, nav bars
+          └─ raised (#2f2f31) – modals, popovers, dropdowns
+             └─ depth (#39393b) – alert dialogs, tooltips
+
+       subtle (#333335)  – hover / selected / pill fills
+    */
+    --color-page: #1c1c1e;
+    --color-surface: #252527;
+    --color-surface-raised: #2f2f31;
+    --color-subtle: #333335;
+    --color-border: #3a3a3c;
+
+    /* ── macOS Text Hierarchy ── */
+    --color-ink: #ffffff;
+    --color-ink-soft: #e5e5ea;
+    --color-ink-muted: #8e8e93;
+
+    /* ── Brand — #34C759 already pops on dark, just tweak hover/wash ── */
+    --color-brand: #4d9279;
+    --color-brand-hover: #408a71;
+    --color-brand-muted: #6fcf97;
+    --color-brand-wash: #1c332b;
+    --color-brand-wash-text: #6fcf97;
+
+    /* ── macOS Semantic Colors (dark mode) ── */
+    --color-success: #30d158;
+    --color-success-hover: #32d74b;
+    --color-success-bg: #1c332b;
+    --color-success-border: #2d4a3e;
+    --color-success-text: #6fcf97;
+
+    --color-error: #ff453a;
+    --color-error-hover: #ff6961;
+    --color-error-bg: #3a1c1c;
+    --color-error-border: #5c2b2b;
+    --color-error-text: #ff8a80;
+
+    --color-warning: #ff9f0a;
+    --color-warning-hover: #ffb340;
+    --color-warning-bg: #3d2d1a;
+    --color-warning-border: #5c4528;
+    --color-warning-text: #ffb74d;
+
+    --color-info: #0a84ff;
+    --color-info-hover: #409cff;
+    --color-info-bg: #1a2d4a;
+    --color-info-border: #2d4566;
+    --color-info-text: #64b5f6;
+
+    /* ── Shadcn/Radix HSL overrides (macOS-warm neutrals) ── */
+    --color-background: 240 5% 11%;
+    --color-foreground: 0 0% 100%;
+    --color-card: 240 4% 14%;
+    --color-card-foreground: 0 0% 96%;
+    --color-popover: 240 4% 19%;
+    --color-popover-foreground: 0 0% 96%;
+    --color-primary: 158 31% 44%;
+    --color-primary-foreground: 0 0% 100%;
+    --color-secondary: 240 4% 16%;
+    --color-secondary-foreground: 0 0% 92%;
+    --color-muted: 240 4% 16%;
+    --color-muted-foreground: 240 3% 59%;
+    --color-shadcn-accent: 240 4% 21%;
+    --color-shadcn-accent-foreground: 0 0% 96%;
+    --color-destructive: 0 72% 51%;
+    --color-destructive-foreground: 0 0% 100%;
+    --color-shadcn-border: 240 4% 23%;
+    --color-input: 240 4% 23%;
+    --color-ring: 150 50% 61%;
 }
 
-/* ── Dark mode: bg-white → card surface ──           */
-/* Declared outside @layer so it wins over Tailwind's */
-/* layered utility and applies globally in dark mode. */
-.dark .bg-white {
-    background-color: #1a1d27;
+/* ─────────────────────────────────────────────────────────────
+   SEMANTIC UTILITY CLASSES
+   Use these everywhere instead of raw zinc/white classes so
+   components automatically flip between light and dark.
+   ───────────────────────────────────────────────────────────── */
+@utility bg-page {
+    background-color: var(--color-page);
+}
+@utility bg-surface {
+    background-color: var(--color-surface);
+}
+@utility bg-raised {
+    background-color: var(--color-surface-raised);
+}
+@utility bg-subtle {
+    background-color: var(--color-subtle);
+}
+@utility border-border {
+    border-color: var(--color-border);
+}
+@utility text-ink {
+    color: var(--color-ink);
+}
+@utility text-ink-soft {
+    color: var(--color-ink-soft);
+}
+@utility text-ink-muted {
+    color: var(--color-ink-muted);
 }
 
-.dark .border-white {
-    border-color: #2a2d3a;
+/* ── Semantic color utilities ── */
+@utility text-success {
+    color: var(--color-success);
+}
+@utility text-error {
+    color: var(--color-error);
+}
+@utility text-warning {
+    color: var(--color-warning);
+}
+@utility text-info {
+    color: var(--color-info);
 }
 
+@utility bg-success {
+    background-color: var(--color-success);
+}
+@utility bg-error {
+    background-color: var(--color-error);
+}
+@utility bg-warning {
+    background-color: var(--color-warning);
+}
+@utility bg-info {
+    background-color: var(--color-info);
+}
+
+@utility bg-success-bg {
+    background-color: var(--color-success-bg);
+}
+@utility bg-error-bg {
+    background-color: var(--color-error-bg);
+}
+@utility bg-warning-bg {
+    background-color: var(--color-warning-bg);
+}
+@utility bg-info-bg {
+    background-color: var(--color-info-bg);
+}
+
+@utility border-success {
+    border-color: var(--color-success-border);
+}
+@utility border-error {
+    border-color: var(--color-error-border);
+}
+@utility border-warning {
+    border-color: var(--color-warning-border);
+}
+@utility border-info {
+    border-color: var(--color-info-border);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BASE LAYER
+   ───────────────────────────────────────────────────────────── */
 @layer base {
     html {
         font-family: "Geist", "system-ui", "sans-serif";
+        background-color: var(--color-page);
+    }
+
+    /* ── macOS-style text selection ── */
+    ::selection {
+        background-color: var(--color-brand-muted);
+        color: #ffffff;
+    }
+
+    .dark ::selection {
+        background-color: color-mix(
+            in srgb,
+            var(--color-brand-muted) 70%,
+            transparent
+        );
+        color: #ffffff;
     }
 }
 
-/* ── Landing page animations ── */
+/* ─────────────────────────────────────────────────────────────
+   MACOS-STYLE REFINEMENTS
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Smooth theme transitions (respects reduced motion) ── */
+@media (prefers-reduced-motion: no-preference) {
+    .dark,
+    .dark *,
+    .dark *::before,
+    .dark *::after {
+        transition:
+            background-color 0.35s ease,
+            border-color 0.35s ease,
+            color 0.25s ease,
+            box-shadow 0.35s ease;
+    }
+}
+
+/* ── macOS native-scrollbar styling (dark mode only) ── */
+.dark {
+    scrollbar-color: #48484a #252527;
+    scrollbar-width: thin;
+}
+
+.dark ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: #48484a;
+    border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #5a5a5c;
+}
+
+.dark ::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* ── macOS frosted-glass backdrop utility ── */
+@utility bg-frost {
+    background-color: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .bg-frost {
+    background-color: color-mix(in srgb, var(--color-surface) 65%, transparent);
+}
+
+/* ── macOS-style focus ring ── */
+@utility focus-ring-mac {
+    @apply outline-none;
+    @apply ring-2 ring-brand-muted/60 ring-offset-2 ring-offset-page;
+    border-radius: var(--radius-md);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LANDING PAGE ANIMATIONS
+   ───────────────────────────────────────────────────────────── */
 @keyframes fadeUp {
     from {
         opacity: 0;

@@ -40,14 +40,14 @@ export function ManageFilesTable({ files, loading, onDelete }: ManageFilesTableP
 
   if (loading) {
     return (
-      <div className="text-center py-12 text-zinc-500">Loading your files...</div>
+      <div className="text-center py-12 text-ink-muted">Loading your files...</div>
     )
   }
 
   if (files.length === 0) {
     return (
-      <div className="text-center py-12 text-zinc-500">
-        You haven't uploaded any files yet.
+      <div className="text-center py-12 text-ink-muted">
+        You haven&apos;t uploaded any files yet.
       </div>
     )
   }
@@ -56,33 +56,33 @@ export function ManageFilesTable({ files, loading, onDelete }: ManageFilesTableP
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-zinc-200">
-            <th className="text-left py-3 px-4 text-sm font-semibold text-zinc-900">Title</th>
-            <th className="text-left py-3 px-4 text-sm font-semibold text-zinc-900">Course Code</th>
-            <th className="text-left py-3 px-4 text-sm font-semibold text-zinc-900">Level</th>
-            <th className="text-left py-3 px-4 text-sm font-semibold text-zinc-900">Downloads</th>
-            <th className="text-left py-3 px-4 text-sm font-semibold text-zinc-900">Upload Date</th>
-            <th className="text-right py-3 px-4 text-sm font-semibold text-zinc-900">Actions</th>
+          <tr className="border-b border-border">
+            <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Title</th>
+            <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Course Code</th>
+            <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Level</th>
+            <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Downloads</th>
+            <th className="text-left py-3 px-4 text-sm font-semibold text-ink">Upload Date</th>
+            <th className="text-right py-3 px-4 text-sm font-semibold text-ink">Actions</th>
           </tr>
         </thead>
         <tbody>
           {files.map((file) => (
-            <tr key={file.id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors">
+            <tr key={file.id} className="border-b border-border hover:bg-subtle transition-colors">
               <td className="py-3 px-4">
-                <div className="font-medium text-zinc-900">{file.title}</div>
-                <div className="text-xs text-zinc-500">{file.file_type}</div>
+                <div className="font-medium text-ink">{file.title}</div>
+                <div className="text-xs text-ink-muted">{file.file_type}</div>
               </td>
-              <td className="py-3 px-4 text-sm text-zinc-700">{file.course_code}</td>
-              <td className="py-3 px-4 text-sm text-zinc-700">{file.level}</td>
-              <td className="py-3 px-4 text-sm text-zinc-700">{file.downloads}</td>
-              <td className="py-3 px-4 text-sm text-zinc-700">
+              <td className="py-3 px-4 text-sm text-ink-soft">{file.course_code}</td>
+              <td className="py-3 px-4 text-sm text-ink-soft">{file.level}</td>
+              <td className="py-3 px-4 text-sm text-ink-soft">{file.downloads}</td>
+              <td className="py-3 px-4 text-sm text-ink-soft">
                 {new Date(file.created_at).toLocaleDateString()}
               </td>
               <td className="py-3 px-4 text-right">
                 <div className="flex items-center justify-end gap-2">
                   <a
                     href={`/api/download/${file.id}`}
-                    className="p-2 text-zinc-500 hover:text-zinc-900 transition-colors"
+                    className="p-2 text-ink-muted hover:text-ink transition-colors"
                     title="Download"
                   >
                     <Download className="size-4" />
@@ -92,7 +92,7 @@ export function ManageFilesTable({ files, loading, onDelete }: ManageFilesTableP
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-zinc-500 hover:text-red-600"
+                        className="text-ink-muted hover:text-red-600"
                         onClick={() => setDeletingFile(file)}
                       >
                         <Trash2 className="size-4" />
@@ -102,7 +102,7 @@ export function ManageFilesTable({ files, loading, onDelete }: ManageFilesTableP
                       <AlertDialogHeader>
                         <AlertDialogTitle>Delete File</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to delete "{file.title}"? This action cannot be undone.
+                          Are you sure you want to delete &quot;{file.title}&quot;? This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

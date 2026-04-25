@@ -182,28 +182,28 @@ export default function SignupPage() {
   ];
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-zinc-50 py-12 px-4">
-      <div className="bg-white border border-zinc-200 rounded-md p-8 w-full max-w-lg">
-        <h1 className="text-zinc-900 font-bold text-xl mb-1">Scholr</h1>
-        <p className="text-zinc-400 text-sm mb-6">
+    <main className="min-h-screen flex items-center justify-center bg-page py-12 px-4">
+      <div className="bg-surface border border-line rounded-md p-8 w-full max-w-lg">
+        <h1 className="text-ink font-bold text-xl mb-1">Scholr</h1>
+        <p className="text-ink-muted text-sm mb-6">
           Create your account to get started.
         </p>
 
         <form onSubmit={handleSubmit}>
           {errors.general && (
-            <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-600">
+            <div className="mb-4 rounded-md bg-destructive/10 p-3 text-sm text-destructive">
               {errors.general}
             </div>
           )}
 
-          <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-3">
+          <p className="text-ink-muted text-xs font-medium uppercase tracking-wide mb-3">
             Account Details
           </p>
 
           <div className="mb-4">
             <label
               htmlFor="fullName"
-              className="block text-zinc-700 text-sm font-medium mb-1"
+              className="block text-ink-soft text-sm font-medium mb-1"
             >
               Full Name
             </label>
@@ -213,18 +213,18 @@ export default function SignupPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="John Doe"
-              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3"
               disabled={isLoading}
             />
             {errors.fullName && (
-              <p className="text-red-600 text-sm mt-1">{errors.fullName}</p>
+              <p className="text-destructive text-sm mt-1">{errors.fullName}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-zinc-700 text-sm font-medium mb-1"
+              className="block text-ink-soft text-sm font-medium mb-1"
             >
               Email
             </label>
@@ -234,18 +234,18 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3"
               disabled={isLoading}
             />
             {errors.email && (
-              <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+              <p className="text-destructive text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-zinc-700 text-sm font-medium mb-1"
+              className="block text-ink-soft text-sm font-medium mb-1"
             >
               Password
             </label>
@@ -256,13 +256,13 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 pr-10"
+                className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3 pr-10"
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-soft"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -273,14 +273,14 @@ export default function SignupPage() {
               </button>
             </div>
             {errors.password && (
-              <p className="text-red-600 text-sm mt-1">{errors.password}</p>
+              <p className="text-destructive text-sm mt-1">{errors.password}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label
               htmlFor="confirmPassword"
-              className="block text-zinc-700 text-sm font-medium mb-1"
+              className="block text-ink-soft text-sm font-medium mb-1"
             >
               Confirm Password
             </label>
@@ -291,13 +291,13 @@ export default function SignupPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3 pr-10"
+                className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3 pr-10"
                 disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink-soft"
                 aria-label={
                   showConfirmPassword ? "Hide password" : "Show password"
                 }
@@ -310,7 +310,7 @@ export default function SignupPage() {
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.confirmPassword}
               </p>
             )}
@@ -319,7 +319,7 @@ export default function SignupPage() {
           <div className="mb-4">
             <label
               htmlFor="signupCode"
-              className="block text-zinc-700 text-sm font-medium mb-1"
+              className="block text-ink-soft text-sm font-medium mb-1"
             >
               Sign Up Code
             </label>
@@ -329,20 +329,22 @@ export default function SignupPage() {
               value={signupCode}
               onChange={(e) => setSignupCode(e.target.value)}
               placeholder="Enter MTU sign up code"
-              className="bg-white border border-zinc-200 rounded-md text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent h-9 w-full px-3"
+              className="bg-surface border border-border rounded-md text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-muted focus:border-transparent h-9 w-full px-3"
               disabled={isLoading}
             />
             {errors.signupCode && (
-              <p className="text-red-600 text-sm mt-1">{errors.signupCode}</p>
+              <p className="text-destructive text-sm mt-1">
+                {errors.signupCode}
+              </p>
             )}
           </div>
 
-          <p className="text-zinc-400 text-xs font-medium uppercase tracking-wide mb-3 mt-6">
+          <p className="text-ink-muted text-xs font-medium uppercase tracking-wide mb-3 mt-6">
             Academic Profile
           </p>
 
           <div className="mb-4">
-            <label className="block text-zinc-700 text-sm font-medium mb-2">
+            <label className="block text-ink-soft text-sm font-medium mb-2">
               Role
             </label>
             <div className="flex gap-3">
@@ -356,8 +358,8 @@ export default function SignupPage() {
                     onClick={() => setRole(option.id)}
                     className={`flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-md border transition-colors ${
                       isSelected
-                        ? "bg-blue-50 border-blue-600 text-blue-700"
-                        : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300"
+                        ? "bg-brand-wash border-brand text-brand"
+                        : "bg-surface border-border text-ink-soft hover:border-border"
                     }`}
                   >
                     <Icon className="size-5 mb-1" />
@@ -367,14 +369,14 @@ export default function SignupPage() {
               })}
             </div>
             {errors.role && (
-              <p className="text-red-600 text-sm mt-1">{errors.role}</p>
+              <p className="text-destructive text-sm mt-1">{errors.role}</p>
             )}
           </div>
 
           {role !== "librarian" && (
             <>
               <div className="mb-4">
-                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                <label className="block text-ink-soft text-sm font-medium mb-1">
                   College
                 </label>
                 <Select
@@ -394,12 +396,14 @@ export default function SignupPage() {
                   </SelectContent>
                 </Select>
                 {errors.college && (
-                  <p className="text-red-600 text-sm mt-1">{errors.college}</p>
+                  <p className="text-destructive text-sm mt-1">
+                    {errors.college}
+                  </p>
                 )}
               </div>
 
               <div className="mb-4">
-                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                <label className="block text-ink-soft text-sm font-medium mb-1">
                   Department
                 </label>
                 <Select
@@ -423,7 +427,7 @@ export default function SignupPage() {
                   </SelectContent>
                 </Select>
                 {errors.department && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-destructive text-sm mt-1">
                     {errors.department}
                   </p>
                 )}
@@ -434,7 +438,7 @@ export default function SignupPage() {
           {role !== "lecturer" && role !== "librarian" && (
             <>
               <div className="mb-4">
-                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                <label className="block text-ink-soft text-sm font-medium mb-1">
                   Programme
                 </label>
                 <Select
@@ -460,14 +464,14 @@ export default function SignupPage() {
                   </SelectContent>
                 </Select>
                 {errors.programme && (
-                  <p className="text-red-600 text-sm mt-1">
+                  <p className="text-destructive text-sm mt-1">
                     {errors.programme}
                   </p>
                 )}
               </div>
 
               <div className="mb-4">
-                <label className="block text-zinc-700 text-sm font-medium mb-1">
+                <label className="block text-ink-soft text-sm font-medium mb-1">
                   Level
                 </label>
                 <Select
@@ -487,7 +491,9 @@ export default function SignupPage() {
                   </SelectContent>
                 </Select>
                 {errors.level && (
-                  <p className="text-red-600 text-sm mt-1">{errors.level}</p>
+                  <p className="text-destructive text-sm mt-1">
+                    {errors.level}
+                  </p>
                 )}
               </div>
             </>
@@ -496,7 +502,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+            className="bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md h-9 w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed mt-6"
           >
             {isLoading ? (
               <Loader2 className="size-4 animate-spin" />
@@ -506,9 +512,9 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="text-zinc-500 text-sm mt-4 text-center">
+        <p className="text-ink-muted text-sm mt-4 text-center">
           {"Already have an account? "}
-          <Link href="/login" className="text-blue-600 hover:text-blue-700">
+          <Link href="/login" className="text-brand-muted hover:text-brand">
             Sign in
           </Link>
         </p>

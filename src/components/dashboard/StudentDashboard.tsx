@@ -1,63 +1,100 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useUser } from '@/hooks/useUser'
-import { useFiles } from '@/hooks/useFiles'
-import { useBookmarks } from '@/hooks/useBookmarks'
-import { useNotifications } from '@/hooks/useNotifications'
-import { BookOpen, FileText, Bookmark, Bell, ArrowRight, Search, Library } from 'lucide-react'
-import { FileCard } from '@/components/files/FileCard'
-import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton'
+import Link from "next/link";
+import { useUser } from "@/hooks/useUser";
+import { useFiles } from "@/hooks/useFiles";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { useNotifications } from "@/hooks/useNotifications";
+import {
+  BookOpen,
+  FileText,
+  Bookmark,
+  Bell,
+  ArrowRight,
+  Search,
+  Library,
+} from "lucide-react";
+import { FileCard } from "@/components/files/FileCard";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 export function StudentDashboard() {
-  const { user } = useUser()
-  const { data: recentFiles, loading: filesLoading } = useFiles({ page: 1, sortBy: 'newest', materialType: 'course_material' })
-  const { bookmarkedFileIds } = useBookmarks()
-  const { unreadCount } = useNotifications()
+  const { user } = useUser();
+  const { data: recentFiles, loading: filesLoading } = useFiles({
+    page: 1,
+    sortBy: "newest",
+    materialType: "course_material",
+  });
+  const { bookmarkedFileIds } = useBookmarks();
+  const { unreadCount } = useNotifications();
 
-  const name = user?.profile?.full_name?.split(' ')[0] || 'Student'
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+  const name = user?.profile?.full_name?.split(" ")[0] || "Student";
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
-  const bookmarkedFiles = recentFiles?.filter(f => bookmarkedFileIds.has(f.id)) || []
+  const bookmarkedFiles =
+    recentFiles?.filter((f) => bookmarkedFileIds.has(f.id)) || [];
 
   const stats = [
-    { label: 'Recent Files', value: recentFiles?.length ?? 0, icon: FileText },
-    { label: 'Bookmarks', value: bookmarkedFileIds.size, icon: Bookmark },
-    { label: 'Notifications', value: unreadCount, icon: Bell },
-  ]
+    { label: "Recent Files", value: recentFiles?.length ?? 0, icon: FileText },
+    { label: "Bookmarks", value: bookmarkedFileIds.size, icon: Bookmark },
+    { label: "Notifications", value: unreadCount, icon: Bell },
+  ];
 
   const quickActions = [
-    { href: '/browse', label: 'Browse Files', icon: Search, desc: 'Find course materials' },
-    { href: '/library', label: 'Library', icon: Library, desc: 'Textbooks & references' },
-    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, desc: 'Your saved files' },
-  ]
+    {
+      href: "/browse",
+      label: "Browse Files",
+      icon: Search,
+      desc: "Find course materials",
+    },
+    {
+      href: "/library",
+      label: "Library",
+      icon: Library,
+      desc: "Textbooks & references",
+    },
+    {
+      href: "/bookmarks",
+      label: "Bookmarks",
+      icon: Bookmark,
+      desc: "Your saved files",
+    },
+  ];
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-10">
-
+    <div className="max-w-6xl mx-auto px-4 py-10">
       {/* Hero greeting */}
       <div className="mb-8">
-        <h1 className="text-[28px] font-semibold text-zinc-900 mb-1">
+        <h1 className="text-[28px] font-semibold text-ink mb-1">
           {greeting}, {name} 👋
         </h1>
-        <p className="text-[14px] text-zinc-500">
-          {[user?.profile?.programmes?.[0], user?.profile?.level ? `Level ${user.profile.level}` : null]
-            .filter(Boolean).join(' · ') || 'Welcome to Scholr'}
+        <p className="text-[14px] text-ink-muted">
+          {[
+            user?.profile?.programmes?.[0],
+            user?.profile?.level ? `Level ${user.profile.level}` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ") || "Welcome to Scholr"}
         </p>
       </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {stats.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="bg-white border border-zinc-200 rounded-md p-5">
+          <div
+            key={label}
+            className="bg-surface border border-border rounded-md p-5"
+          >
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-medium text-zinc-500 uppercase tracking-wide">{label}</p>
-              <div className="p-1.5 bg-zinc-100 rounded-md">
-                <Icon className="size-4 text-zinc-500" />
+              <p className="text-xs font-medium text-ink-muted uppercase tracking-wide">
+                {label}
+              </p>
+              <div className="p-1.5 bg-subtle rounded-md">
+                <Icon className="size-4 text-ink-muted" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-zinc-900">{value}</p>
+            <p className="text-3xl font-bold text-ink">{value}</p>
           </div>
         ))}
       </div>
@@ -68,16 +105,16 @@ export function StudentDashboard() {
           <Link
             key={href}
             href={href}
-            className="group flex items-center gap-4 bg-white border border-zinc-200 rounded-md p-4 hover:border-zinc-300 hover:shadow-sm transition-all"
+            className="group flex items-center gap-4 bg-surface border border-border rounded-md p-4 hover:shadow-sm transition-all"
           >
-            <div className="p-2.5 bg-zinc-100 group-hover:bg-blue-50 rounded-md transition-colors">
-              <Icon className="size-5 text-zinc-500 group-hover:text-blue-600 transition-colors" />
+            <div className="p-2.5 bg-subtle group-hover:bg-brand-wash rounded-md transition-colors">
+              <Icon className="size-5 text-ink-muted group-hover:text-brand-muted transition-colors" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-zinc-900">{label}</p>
-              <p className="text-xs text-zinc-400">{desc}</p>
+              <p className="text-sm font-medium text-ink">{label}</p>
+              <p className="text-xs text-ink-muted">{desc}</p>
             </div>
-            <ArrowRight className="size-4 text-zinc-300 group-hover:text-zinc-500 transition-colors" />
+            <ArrowRight className="size-4 text-ink-muted opacity-50 group-hover:opacity-100 transition-opacity" />
           </Link>
         ))}
       </div>
@@ -85,8 +122,11 @@ export function StudentDashboard() {
       {/* Recent Files */}
       <div className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[16px] font-semibold text-zinc-900">Recent Files</h2>
-          <Link href="/browse" className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1">
+          <h2 className="text-[16px] font-semibold text-ink">Recent Files</h2>
+          <Link
+            href="/browse"
+            className="text-sm text-brand-muted hover:text-brand flex items-center gap-1"
+          >
             View all <ArrowRight className="size-3.5" />
           </Link>
         </div>
@@ -94,14 +134,21 @@ export function StudentDashboard() {
           <LoadingSkeleton variant="card" count={4} />
         ) : recentFiles && recentFiles.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {recentFiles.slice(0, 6).map(file => (
-              <FileCard key={file.id} file={file} isBookmarked={bookmarkedFileIds.has(file.id)} />
+            {recentFiles.slice(0, 6).map((file) => (
+              <FileCard
+                key={file.id}
+                file={file}
+                isBookmarked={bookmarkedFileIds.has(file.id)}
+              />
             ))}
           </div>
         ) : (
-          <div className="bg-white border border-zinc-200 rounded-md py-12 text-center">
-            <FileText className="size-7 text-zinc-300 mx-auto mb-3" strokeWidth={1.5} />
-            <p className="text-sm text-zinc-500">No files available yet.</p>
+          <div className="bg-surface border border-border rounded-md py-12 text-center">
+            <FileText
+              className="size-7 text-ink-muted mx-auto mb-3"
+              strokeWidth={1.5}
+            />
+            <p className="text-sm text-ink-muted">No files available yet.</p>
           </div>
         )}
       </div>
@@ -110,18 +157,23 @@ export function StudentDashboard() {
       {bookmarkedFiles.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[16px] font-semibold text-zinc-900">Your Bookmarks</h2>
-            <Link href="/bookmarks" className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1">
+            <h2 className="text-[16px] font-semibold text-ink">
+              Your Bookmarks
+            </h2>
+            <Link
+              href="/bookmarks"
+              className="text-sm text-brand-muted hover:text-brand flex items-center gap-1"
+            >
               View all <ArrowRight className="size-3.5" />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {bookmarkedFiles.slice(0, 3).map(file => (
+            {bookmarkedFiles.slice(0, 3).map((file) => (
               <FileCard key={file.id} file={file} isBookmarked />
             ))}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
