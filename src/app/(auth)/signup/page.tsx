@@ -10,6 +10,8 @@ import {
   BookOpen,
   Users,
   Library,
+  Mail,
+  CheckCircle2,
 } from "lucide-react";
 import {
   Select,
@@ -18,6 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { createClientSingleton } from "@/lib/supabase/client";
 import {
   colleges,
@@ -58,6 +70,7 @@ export default function SignupPage() {
   const [signupCode, setSignupCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const availableDepartments: Department[] = college
     ? departments[college] || []
@@ -162,10 +175,7 @@ export default function SignupPage() {
         window.location.href = "/dashboard";
       } else {
         // Email confirmation required
-        setErrors({
-          general:
-            "Account created! Please check your email to confirm your account before signing in.",
-        });
+        setShowSuccessDialog(true);
       }
     } catch {
       setErrors({ general: "An unexpected error occurred" });
@@ -513,6 +523,27 @@ export default function SignupPage() {
           </Link>
         </p>
       </div>
+
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogMedia>
+              <CheckCircle2 className="size-6 text-success" />
+            </AlertDialogMedia>
+            <AlertDialogTitle>Check your email</AlertDialogTitle>
+            <AlertDialogDescription>
+              We've sent a verification link to <span className="font-medium text-ink">{email}</span>. Please check your inbox and click the link to verify your account, then sign in.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction asChild>
+              <Link href="/login" className="inline-flex items-center justify-center h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors">
+                Go to Sign In
+              </Link>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   );
 }
