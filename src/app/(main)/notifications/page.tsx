@@ -63,13 +63,13 @@ export default function NotificationsPage() {
               className={`flex items-start gap-4 p-4 rounded-md border transition-colors ${
                 n.is_read
                   ? "bg-surface border-border"
-                  : "bg-blue-50 dark:bg-[#0d1f2d] border-blue-200 dark:border-blue-900"
+                  : "bg-brand-wash border-border"
               }`}
             >
               {/* Unread dot */}
               <div className="mt-1 shrink-0">
                 {!n.is_read ? (
-                  <span className="size-2 rounded-full bg-blue-500 block" />
+                  <span className="size-2 rounded-full bg-brand block" />
                 ) : (
                   <span className="size-2 rounded-full bg-transparent block" />
                 )}

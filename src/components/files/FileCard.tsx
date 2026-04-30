@@ -35,13 +35,13 @@ export function FileCard({
                 e.stopPropagation();
                 onBookmarkToggle();
               }}
-              className="p-1 rounded-sm text-ink-muted hover:text-blue-600 transition-colors"
+              className="p-1 rounded-sm text-ink-muted hover:text-brand transition-colors"
               aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
             >
               <Bookmark
                 className={cn(
                   "size-4",
-                  isBookmarked && "fill-blue-600 text-blue-600",
+                  isBookmarked && "fill-brand text-brand",
                 )}
               />
             </button>

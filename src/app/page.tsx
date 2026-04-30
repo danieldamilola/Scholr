@@ -52,7 +52,7 @@ export default function LandingPage() {
           <h1 className="anim-fade-up delay-100 text-6xl sm:text-7xl font-bold tracking-tight text-ink leading-[1.06] max-w-2xl">
             Study smarter.
             <br />
-            <span className="anim-fade-up delay-200 inline-block text-blue-600">Access more.</span>
+            <span className="anim-fade-up delay-200 inline-block text-brand">Access more.</span>
           </h1>
         </div>
 

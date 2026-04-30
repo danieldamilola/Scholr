@@ -29,7 +29,7 @@ export function BookCard({ book }: BookCardProps) {
 
         {/* Book Info */}
         <div className="p-4">
-          <h3 className="font-semibold text-ink line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors">
+          <h3 className="font-semibold text-ink line-clamp-2 mb-1 group-hover:text-brand transition-colors">
             {book.title}
           </h3>
           <p className="text-sm text-ink-soft mb-2">{book.author}</p>

@@ -110,13 +110,13 @@ export default function Navbar() {
               className={cn(
                 "relative py-4 text-sm transition-colors",
                 pathname === link.href
-                  ? "text-blue-600"
+                  ? "text-brand"
                   : "text-ink-muted hover:text-ink",
               )}
             >
               {link.label}
               {pathname === link.href && (
-                <span className="absolute bottom-0 left-0 h-0.5 w-full bg-blue-600" />
+                <span className="absolute bottom-0 left-0 h-0.5 w-full bg-brand" />
               )}
             </Link>
           ))}
@@ -133,7 +133,7 @@ export default function Navbar() {
                     pathname === "/manage" ||
                     pathname === "/library/upload" ||
                     pathname === "/manage-books"
-                    ? "text-blue-600"
+                    ? "text-brand"
                     : "text-ink-muted hover:text-ink",
                 )}
               >
@@ -148,7 +148,7 @@ export default function Navbar() {
                   pathname === "/manage" ||
                   pathname === "/library/upload" ||
                   pathname === "/manage-books") && (
-                  <span className="absolute bottom-0 left-0 h-0.5 w-full bg-blue-600" />
+                  <span className="absolute bottom-0 left-0 h-0.5 w-full bg-brand" />
                 )}
               </button>
 
@@ -311,7 +311,7 @@ export default function Navbar() {
                       className={cn(
                         "px-4 py-3 text-sm transition-colors",
                         pathname === link.href
-                          ? "bg-subtle text-blue-600"
+                          ? "bg-subtle text-brand"
                           : "text-ink-muted hover:bg-subtle hover:text-ink",
                       )}
                     >
@@ -337,7 +337,7 @@ export default function Navbar() {
                             className={cn(
                               "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                               pathname === item.href.split("?")[0]
-                                ? "bg-subtle text-blue-600"
+                                ? "bg-subtle text-brand"
                                 : "text-ink-muted hover:bg-subtle hover:text-ink",
                             )}
                           >
@@ -366,7 +366,7 @@ export default function Navbar() {
                             className={cn(
                               "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                               pathname === item.href
-                                ? "bg-subtle text-blue-600"
+                                ? "bg-subtle text-brand"
                                 : "text-ink-muted hover:bg-subtle hover:text-ink",
                             )}
                           >
@@ -390,7 +390,7 @@ export default function Navbar() {
                     className={cn(
                       "flex items-center gap-2.5 px-4 py-3 text-sm transition-colors",
                       pathname === "/profile"
-                        ? "bg-subtle text-blue-600"
+                        ? "bg-subtle text-brand"
                         : "text-ink-muted hover:bg-subtle hover:text-ink",
                     )}
                   >

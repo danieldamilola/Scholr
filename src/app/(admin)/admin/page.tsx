@@ -229,7 +229,7 @@ export default function AdminPage() {
                 return (
                   <div
                     key={card.label}
-                    className="bg-white border border-border rounded-md p-5"
+                    className="bg-surface border border-border rounded-md p-5"
                   >
                     <div className="flex items-center gap-3">
                       <div className={`p-2.5 ${card.bg} rounded-md`}>
@@ -251,7 +251,7 @@ export default function AdminPage() {
       )}
 
       {activeTab === "users" && (
-        <div className="bg-white border border-border rounded-md overflow-hidden">
+        <div className="bg-surface border border-border rounded-md overflow-hidden">
           {usersLoading ? (
             <div className="flex justify-center py-16">
               <Loader2 className="size-5 text-ink-muted animate-spin" />

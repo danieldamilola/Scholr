@@ -54,7 +54,7 @@ export default function ResetPasswordPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-page px-4">
-      <div className="bg-surface border border-line rounded-md p-8 w-full max-w-sm">
+      <div className="bg-surface border border-border rounded-md p-8 w-full max-w-sm">
         <h1 className="text-ink font-bold text-xl mb-1">Scholr</h1>
         <p className="text-ink-muted text-sm mb-6">
           Set a new password for your account.

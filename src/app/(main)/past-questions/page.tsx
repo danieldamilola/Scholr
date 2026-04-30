@@ -60,8 +60,8 @@ export default function PastQuestionsPage() {
     <div className="mx-auto max-w-7xl px-4 py-10">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="inline-flex size-9 items-center justify-center rounded-md bg-blue-50">
-          <FileQuestion className="size-4 text-blue-600" />
+        <div className="inline-flex size-9 items-center justify-center rounded-md bg-brand-wash">
+          <FileQuestion className="size-4 text-brand" />
         </div>
         <div>
           <h1 className="text-2xl font-semibold text-ink">Past Questions</h1>

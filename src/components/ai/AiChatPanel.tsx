@@ -174,7 +174,7 @@ export function AiChatPanel({
         )}
 
         {error && (
-          <div className="flex items-start gap-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 rounded-md p-3 border border-red-100 dark:border-red-900">
+          <div className="flex items-start gap-2 text-xs text-error-text bg-error-bg rounded-md p-3 border border-error-border">
             <AlertCircle className="size-3.5 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>

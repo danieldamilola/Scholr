@@ -72,8 +72,8 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-page px-4">
-      <div className="bg-surface border border-line rounded-md p-8 w-full max-w-sm">
+    <main className="min-h-screen flex items-center justify-center bg-page px-4 shadow-black">
+      <div className="bg-surface border border-none rounded-md p-8 w-full max-w-sm">
         {/* ─── Forgot Password View ─── */}
         {view === "forgot" ? (
           <>

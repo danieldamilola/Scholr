@@ -87,7 +87,7 @@ export default function AdminContentPage() {
           {activeTab === "files" ? "No files found." : "No books found."}
         </div>
       ) : (
-        <div className="bg-white border border-border rounded-md overflow-hidden">
+        <div className="bg-surface border border-border rounded-md overflow-hidden">
           <table className="w-full">
             <thead className="bg-subtle border-b border-border">
               <tr>

@@ -321,7 +321,7 @@ function ProfileForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="inline-flex items-center gap-2 h-9 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
+          className="inline-flex items-center gap-2 h-9 px-5 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
         >
           {isLoading && <Loader2 className="size-4 animate-spin" />}
           {isLoading ? "Saving…" : "Save Changes"}
@@ -409,7 +409,7 @@ function PasswordForm() {
         <button
           type="submit"
           disabled={isLoading || !newPassword || !confirmPassword}
-          className="inline-flex items-center gap-2 h-9 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
+          className="inline-flex items-center gap-2 h-9 px-5 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
         >
           {isLoading && <Loader2 className="size-4 animate-spin" />}
           {isLoading ? "Updating…" : "Update Password"}
@@ -493,7 +493,7 @@ export default function ProfilePage() {
                 className={cn(
                   "w-full flex items-center justify-between gap-2.5 px-4 py-3 text-sm transition-colors border-b border-border last:border-0",
                   activeTab === id
-                    ? "bg-blue-50 dark:bg-[#0d1f2d] text-blue-700 dark:text-blue-400 font-medium"
+                    ? "bg-brand-wash text-brand font-medium"
                     : "text-ink-soft hover:bg-subtle hover:text-ink",
                 )}
               >
@@ -504,7 +504,7 @@ export default function ProfilePage() {
                 <ChevronRight
                   className={cn(
                     "size-3.5 transition-colors",
-                    activeTab === id ? "text-blue-400" : "text-ink-muted",
+                    activeTab === id ? "text-brand-muted" : "text-ink-muted",
                   )}
                 />
               </button>

@@ -15,7 +15,7 @@ export default function UploadPage() {
             Share notes, slides, and past questions with your students.
           </p>
         </div>
-        <div className="bg-surface border border-line rounded-md p-6">
+        <div className="bg-surface border border-border rounded-md p-6">
           <FileUploadForm />
         </div>
       </div>

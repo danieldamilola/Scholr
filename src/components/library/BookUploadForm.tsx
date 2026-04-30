@@ -387,7 +387,7 @@ export function BookUploadForm() {
           onDrop={handleFileDrop}
           className={`relative border-2 border-dashed rounded-md p-8 text-center transition-colors ${
             isDraggingFile
-              ? "border-blue-400 bg-brand-wash"
+              ? "border-brand bg-brand-wash"
               : file
                 ? "border-border bg-subtle"
                 : "border-border hover:border-border"
@@ -457,7 +457,7 @@ export function BookUploadForm() {
           onDrop={handleCoverDrop}
           className={`relative border-2 border-dashed rounded-md p-6 text-center transition-colors ${
             isDraggingCover
-              ? "border-blue-400 bg-brand-wash"
+              ? "border-brand bg-brand-wash"
               : cover
                 ? "border-border bg-subtle"
                 : "border-border hover:border-border"

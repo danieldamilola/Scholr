@@ -95,7 +95,7 @@ function RequestCard({
   };
 
   return (
-    <div className="bg-surface border border-line rounded-md overflow-hidden">
+    <div className="bg-surface border border-border rounded-md overflow-hidden">
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -110,9 +110,7 @@ function RequestCard({
               )}
               <StatusBadge status={req.status} />
             </div>
-            <p className="text-sm font-semibold text-ink mb-0.5">
-              {req.title}
-            </p>
+            <p className="text-sm font-semibold text-ink mb-0.5">{req.title}</p>
             {isStaff ? (
               <p className="text-xs text-ink-muted">
                 From{" "}
@@ -170,7 +168,7 @@ function RequestCard({
             <button
               type="button"
               onClick={() => setResponding(true)}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="text-sm text-brand hover:text-brand-hover font-medium"
             >
               Respond to this request →
             </button>
@@ -290,9 +288,9 @@ function PersonSearch({
   return (
     <div className="relative">
       {selected ? (
-        <div className="flex items-center gap-2 h-9 px-3 bg-blue-50 border border-blue-200 rounded-md">
-          <User className="size-3.5 text-blue-600 shrink-0" />
-          <span className="text-sm text-blue-800 font-medium flex-1">
+        <div className="flex items-center gap-2 h-9 px-3 bg-brand-wash border border-border rounded-md">
+          <User className="size-3.5 text-brand shrink-0" />
+          <span className="text-sm text-brand-text font-medium flex-1">
             {selected.full_name}
           </span>
           <button
@@ -302,7 +300,7 @@ function PersonSearch({
               setQuery("");
               setResults([]);
             }}
-            className="text-blue-400 hover:text-blue-700 text-xs"
+            className="text-brand-muted hover:text-brand text-xs"
           >
             ✕
           </button>
@@ -340,8 +338,8 @@ function PersonSearch({
                   }}
                   className="flex items-center gap-3 w-full px-3 py-2.5 text-left hover:bg-subtle transition-colors"
                 >
-                  <div className="size-7 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                    <span className="text-xs font-semibold text-blue-600">
+                  <div className="size-7 rounded-full bg-brand-wash flex items-center justify-center shrink-0">
+                    <span className="text-xs font-semibold text-brand">
                       {p.full_name.charAt(0)}
                     </span>
                   </div>
@@ -475,9 +473,7 @@ export default function RequestsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-ink mb-1">
-            Requests
-          </h1>
+          <h1 className="text-2xl font-semibold text-ink mb-1">Requests</h1>
           <p className="text-sm text-ink-muted">
             {isStaff
               ? "Manage incoming requests and track ones you submitted"
@@ -488,7 +484,7 @@ export default function RequestsPage() {
           <button
             type="button"
             onClick={() => setShowForm(!showForm)}
-            className="inline-flex items-center gap-2 h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            className="inline-flex items-center gap-2 h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
           >
             <Send className="size-4" /> New Request
           </button>
@@ -507,11 +503,9 @@ export default function RequestsPage() {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="bg-surface border border-line rounded-md p-6 mb-8 space-y-4"
+          className="bg-surface border border-border rounded-md p-6 mb-8 space-y-4"
         >
-          <p className="text-sm font-semibold text-ink mb-2">
-            New Request
-          </p>
+          <p className="text-sm font-semibold text-ink mb-2">New Request</p>
 
           {formError && (
             <div className="flex items-start gap-2 text-xs text-red-600 bg-red-50 rounded-md p-3 border border-red-100">
@@ -621,7 +615,7 @@ export default function RequestsPage() {
             <button
               type="submit"
               disabled={formLoading}
-              className="inline-flex items-center gap-2 h-9 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 h-9 px-5 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
             >
               {formLoading ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -663,7 +657,7 @@ export default function RequestsPage() {
               className={cn(
                 "flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 activeTab === tab.id
-                  ? "border-blue-600 text-blue-600"
+                  ? "border-brand text-brand"
                   : "border-transparent text-ink-muted hover:text-ink-soft",
               )}
             >
@@ -673,7 +667,7 @@ export default function RequestsPage() {
                   className={cn(
                     "inline-flex items-center justify-center size-5 rounded-full text-xs font-semibold",
                     activeTab === tab.id
-                      ? "bg-blue-100 text-blue-600"
+                      ? "bg-brand-wash text-brand"
                       : "bg-subtle text-ink-muted",
                   )}
                 >
@@ -701,7 +695,10 @@ export default function RequestsPage() {
         <div className="space-y-3">
           {myRequests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Bell className="size-10 text-ink-muted opacity-40 mb-3" strokeWidth={1.5} />
+              <Bell
+                className="size-10 text-ink-muted opacity-40 mb-3"
+                strokeWidth={1.5}
+              />
               <p className="text-sm font-medium text-ink mb-1">
                 No requests yet
               </p>
@@ -723,7 +720,10 @@ export default function RequestsPage() {
         <div className="space-y-3">
           {incomingRequests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <Inbox className="size-10 text-ink-muted opacity-40 mb-3" strokeWidth={1.5} />
+              <Inbox
+                className="size-10 text-ink-muted opacity-40 mb-3"
+                strokeWidth={1.5}
+              />
               <p className="text-sm font-medium text-ink mb-1">
                 No incoming requests
               </p>

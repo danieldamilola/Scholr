@@ -590,7 +590,7 @@ export function FileUploadForm() {
         onDrop={handleDrop}
         className={`relative border-2 border-dashed rounded-md p-8 text-center transition-colors ${
           isDragging
-            ? "border-blue-400 bg-brand-wash"
+            ? "border-brand bg-brand-wash"
             : file
               ? "border-border bg-subtle"
               : "border-border hover:border-border"

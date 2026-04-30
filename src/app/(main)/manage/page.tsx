@@ -100,7 +100,7 @@ export default function ManagePage() {
           </div>
         )}
 
-        <div className="bg-surface border border-line rounded-md overflow-hidden">
+        <div className="bg-surface border border-border rounded-md overflow-hidden">
           <ManageFilesTable
             files={files}
             loading={loading}

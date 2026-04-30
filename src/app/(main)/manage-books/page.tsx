@@ -110,7 +110,7 @@ export default function ManageBooksPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-surface border border-line rounded-md overflow-hidden">
+        <div className="bg-surface border border-border rounded-md overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-subtle">

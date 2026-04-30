@@ -134,7 +134,7 @@ function SelectItem({
       {/* Check indicator on the right */}
       <span className="absolute right-2 flex size-4 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="size-3.5 text-blue-600" />
+          <CheckIcon className="size-3.5 text-brand" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

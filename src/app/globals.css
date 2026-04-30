@@ -127,7 +127,7 @@
     --color-ink-soft: #e5e5ea;
     --color-ink-muted: #8e8e93;
 
-    /* ── Brand — #34C759 already pops on dark, just tweak hover/wash ── */
+    /* ── Brand — more vibrant in dark mode ── */
     --color-brand: #4d9279;
     --color-brand-hover: #408a71;
     --color-brand-muted: #6fcf97;

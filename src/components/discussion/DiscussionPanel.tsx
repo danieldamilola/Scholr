@@ -145,7 +145,7 @@ export function DiscussionPanel({ fileId }: { fileId: string }) {
                     onClick={() =>
                       setReplyingTo(replyingTo === thread.id ? null : thread.id)
                     }
-                    className="flex items-center gap-1.5 text-[12px] font-medium text-ink-muted hover:text-blue-600 transition-colors"
+                    className="flex items-center gap-1.5 text-[12px] font-medium text-ink-muted hover:text-brand transition-colors"
                   >
                     <CornerDownRight className="size-3.5" />
                     Reply
@@ -203,7 +203,7 @@ export function DiscussionPanel({ fileId }: { fileId: string }) {
                                 {reply.user?.full_name || "Anonymous"}
                               </span>
                               {reply.user?.role === "lecturer" && (
-                                <span className="bg-blue-50 dark:bg-[#0d1f2d] text-blue-700 dark:text-blue-400 text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
+                                <span className="bg-brand-wash text-brand text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
                                   Lecturer
                                 </span>
                               )}
