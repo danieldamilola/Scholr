@@ -534,16 +534,22 @@ export default function SignupPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogMedia>
-              <CheckCircle2 className="size-6 text-success" />
+              <CheckCircle2 className="size-6 text-brand" />
             </AlertDialogMedia>
             <AlertDialogTitle>Check your email</AlertDialogTitle>
             <AlertDialogDescription>
-              We've sent a verification link to <span className="font-medium text-ink">{email}</span>. Please check your inbox and click the link to verify your account, then sign in.
+              We've sent a verification link to{" "}
+              <span className="font-medium text-ink">{email}</span>. Please
+              check your inbox and click the link to verify your account, then
+              sign in.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction asChild>
-              <Link href="/login" className="inline-flex items-center justify-center h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors">
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
+              >
                 Go to Sign In
               </Link>
             </AlertDialogAction>
