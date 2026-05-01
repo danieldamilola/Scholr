@@ -1,9 +1,8 @@
-import { Bell } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Bell } from "lucide-react";
 
 interface NotificationBellProps {
-  count: number
-  onClick?: () => void
+  count: number;
+  onClick?: () => void;
 }
 
 export function NotificationBell({ count, onClick }: NotificationBellProps) {
@@ -17,9 +16,9 @@ export function NotificationBell({ count, onClick }: NotificationBellProps) {
       <Bell className="size-5" />
       {count > 0 && (
         <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-brand text-[10px] font-medium text-white">
-          {count > 9 ? '9+' : count}
+          {count > 9 ? "9+" : count}
         </span>
       )}
     </button>
-  )
+  );
 }

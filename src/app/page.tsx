@@ -2,7 +2,6 @@ import Link from 'next/link'
 import {
   FileText, Sparkles, BrainCircuit, BookMarked, Bell, Shield, ArrowRight
 } from 'lucide-react'
-import { FadeIn } from '@/components/landing/FadeIn'
 
 const features = [
   { icon: FileText,     title: 'Course Materials',   desc: 'Notes, slides, and past questions organised by department, level, and semester.' },
@@ -82,27 +81,25 @@ export default function LandingPage() {
       <section className="max-w-5xl mx-auto px-6 py-28">
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
 
-          <FadeIn>
+          <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted pt-1">
               What&apos;s inside
             </p>
-          </FadeIn>
+          </div>
 
           <div>
             {features.map((f, i) => {
               const Icon = f.icon
               return (
-                <FadeIn key={f.title} delay={i * 60}>
-                  <div className={`flex items-start gap-5 py-6 ${i !== features.length - 1 ? 'border-b border-border' : ''}`}>
-                    <div className="mt-0.5 shrink-0 size-8 flex items-center justify-center rounded-md bg-subtle border border-border">
-                      <Icon className="size-3.5 text-ink-muted" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-ink mb-1">{f.title}</p>
-                      <p className="text-sm text-ink-muted leading-relaxed">{f.desc}</p>
-                    </div>
+                <div key={f.title} className={`flex items-start gap-5 py-6 ${i !== features.length - 1 ? 'border-b border-border' : ''}`}>
+                  <div className="mt-0.5 shrink-0 size-8 flex items-center justify-center rounded-md bg-subtle border border-border">
+                    <Icon className="size-3.5 text-ink-muted" />
                   </div>
-                </FadeIn>
+                  <div>
+                    <p className="text-sm font-semibold text-ink mb-1">{f.title}</p>
+                    <p className="text-sm text-ink-muted leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
               )
             })}
           </div>
@@ -116,18 +113,18 @@ export default function LandingPage() {
       <section className="max-w-5xl mx-auto px-6 py-28">
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
 
-          <FadeIn>
+          <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted pt-1">
               Who it&apos;s for
             </p>
-          </FadeIn>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10">
-            {roles.map((r, i) => (
-              <FadeIn key={r.title} delay={i * 80}>
+            {roles.map((r) => (
+              <div key={r.title}>
                 <p className="text-sm font-semibold text-ink mb-1.5">{r.title}</p>
                 <p className="text-sm text-ink-muted leading-relaxed">{r.desc}</p>
-              </FadeIn>
+              </div>
             ))}
           </div>
         </div>
@@ -140,7 +137,7 @@ export default function LandingPage() {
       <section className="max-w-5xl mx-auto px-6 py-28">
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-16">
           <div />
-          <FadeIn>
+          <div>
             <h2 className="text-3xl font-bold text-ink mb-4 leading-tight">
               Ready to get started?
             </h2>
@@ -153,7 +150,7 @@ export default function LandingPage() {
             >
               Create your account <ArrowRight className="size-3.5" />
             </Link>
-          </FadeIn>
+          </div>
         </div>
       </section>
 

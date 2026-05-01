@@ -192,7 +192,7 @@ export default function SignupPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-page py-12 px-4">
-      <div className="bg-surface border border-none rounded-md p-8 w-full max-w-lg">
+      <div className="bg-surface border border-none rounded-md p-8 w-full max-w-lg drop-shadow-lg drop-shadow-gray-100">
         <h1 className="text-ink font-bold text-xl mb-1">Scholr</h1>
         <p className="text-ink-muted text-sm mb-6">
           Create your account to get started.
