@@ -3,6 +3,7 @@
 import { useUser } from "@/hooks/useUser";
 import { BookUploadForm } from "@/components/library/BookUploadForm";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { ShieldAlert } from "lucide-react";
 
 export default function LibraryUploadPage() {
@@ -35,12 +36,10 @@ export default function LibraryUploadPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-ink mb-1">Upload Book</h1>
-        <p className="text-sm text-ink-muted">
-          Add a new textbook or reference material to the MTU library.
-        </p>
-      </div>
+      <PageHeader
+        title="Upload Book"
+        description="Add a new textbook or reference material to the MTU library."
+      />
       <BookUploadForm />
     </div>
   );

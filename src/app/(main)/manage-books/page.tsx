@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { createClientSingleton } from "@/lib/supabase/client";
 import type { BookRecord } from "@/types";
 import { Trash2, BookOpen, Loader2, ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,7 +27,7 @@ export default function ManageBooksPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     const supabase = createClientSingleton();
     const { data } = await supabase
       .from("books")
@@ -34,11 +36,11 @@ export default function ManageBooksPage() {
       .order("created_at", { ascending: false });
     setBooks((data as BookRecord[]) || []);
     setLoading(false);
-  };
+  }, [user?.session?.user?.id]);
 
   useEffect(() => {
     if (user?.session?.user?.id) fetchBooks();
-  }, [user?.session?.user?.id]);
+  }, [fetchBooks]);
 
   const handleDelete = async () => {
     if (!deletingId) return;
@@ -74,25 +76,21 @@ export default function ManageBooksPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink mb-1">My Books</h1>
-          <p className="text-sm text-ink-muted">
-            Manage books you uploaded to the library.
-          </p>
-        </div>
-        <Link
-          href="/library/upload"
-          className="inline-flex items-center gap-2 h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
-        >
-          + Upload Book
-        </Link>
-      </div>
+      <PageHeader
+        title="My Books"
+        description="Manage books you uploaded to the library."
+        action={
+          <Link
+            href="/library/upload"
+            className="inline-flex items-center gap-2 h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
+          >
+            + Upload Book
+          </Link>
+        }
+      />
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="size-5 text-ink-muted animate-spin" />
-        </div>
+        <LoadingSpinner />
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <BookOpen className="size-10 text-ink-muted mb-3" strokeWidth={1.5} />
@@ -138,7 +136,7 @@ export default function ManageBooksPage() {
                   className="border-b border-border last:border-0 hover:bg-subtle transition-colors"
                 >
                   <td className="py-3 px-4">
-                    <p className="text-sm font-medium text-ink truncate max-w-[220px]">
+                    <p className="text-sm font-medium text-ink truncate max-w-55">
                       {book.title}
                     </p>
                     {book.author && (

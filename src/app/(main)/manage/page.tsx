@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { createClientSingleton } from "@/lib/supabase/client";
 import type { FileRecord } from "@/types";
 import RoleGuard from "@/components/auth/RoleGuard";
 import { ManageFilesTable } from "@/components/files/ManageFilesTable";
-import { CheckCircle2, AlertCircle } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { AlertBanner } from "@/components/shared/AlertBanner";
 
 export default function ManagePage() {
   const { user } = useUser();
@@ -22,8 +23,9 @@ export default function ManagePage() {
     setTimeout(() => setToast(null), 4000);
   };
 
-  const fetchFiles = async () => {
-    if (!user?.session?.user.id) return;
+  const fetchFiles = useCallback(async () => {
+    const uid = user?.session?.user.id;
+    if (!uid) return;
 
     setLoading(true);
     try {
@@ -31,7 +33,7 @@ export default function ManagePage() {
       const { data, error } = await supabase
         .from("files")
         .select("*")
-        .eq("uploaded_by", user.session.user.id)
+        .eq("uploaded_by", uid)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -41,11 +43,11 @@ export default function ManagePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.session?.user.id]);
 
   useEffect(() => {
     fetchFiles();
-  }, [user]);
+  }, [fetchFiles]);
 
   const handleDelete = async (file: FileRecord) => {
     if (!user?.session?.user.id) return;
@@ -75,29 +77,18 @@ export default function ManagePage() {
   return (
     <RoleGuard allowedRoles={["lecturer", "class_rep"]}>
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-ink mb-1">My Files</h1>
-          <p className="text-sm text-ink-muted">
-            View and manage your uploaded course materials.
-          </p>
-        </div>
+        <PageHeader
+          title="My Files"
+          description="View and manage your uploaded course materials."
+        />
 
         {/* Toast */}
         {toast && (
-          <div
-            className={`flex items-center gap-2 rounded-md px-4 py-3 text-sm mb-6 border ${
-              toast.type === "success"
-                ? "bg-success-bg border-success text-success-text"
-                : "bg-error-bg border-error text-error-text"
-            }`}
-          >
-            {toast.type === "success" ? (
-              <CheckCircle2 className="size-4 shrink-0" />
-            ) : (
-              <AlertCircle className="size-4 shrink-0" />
-            )}
-            {toast.text}
-          </div>
+          <AlertBanner
+            type={toast.type}
+            message={toast.text}
+            className="mb-6"
+          />
         )}
 
         <div className="bg-surface border border-border rounded-md overflow-hidden">

@@ -10,7 +10,6 @@ import {
   BookOpen,
   Users,
   Library,
-  Mail,
   CheckCircle2,
 } from "lucide-react";
 import {
@@ -538,7 +537,7 @@ export default function SignupPage() {
             </AlertDialogMedia>
             <AlertDialogTitle>Check your email</AlertDialogTitle>
             <AlertDialogDescription>
-              We've sent a verification link to{" "}
+              We have sent a verification link to{" "}
               <span className="font-medium text-ink">{email}</span>. Please
               check your inbox and click the link to verify your account, then
               sign in.

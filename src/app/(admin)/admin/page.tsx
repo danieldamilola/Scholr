@@ -13,6 +13,9 @@ import {
   Loader2,
   ShieldAlert,
 } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
+import { EmptyState } from "@/components/shared/EmptyState";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -171,27 +174,18 @@ export default function AdminPage() {
   ];
 
   if (authLoading || currentUser?.profile?.role !== "admin") {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="size-5 text-ink-muted animate-spin" />
-      </div>
-    );
+    return <LoadingSpinner fullPage />;
   }
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-10">
-      {/* Page Header */}
-      <div className="mb-8 flex items-center gap-3">
-        <div className="p-2 bg-red-50 rounded-md">
-          <ShieldAlert className="size-5 text-red-600" />
-        </div>
-        <div>
-          <h1 className="text-[24px] font-semibold text-ink">Admin Panel</h1>
-          <p className="text-[14px] text-ink-muted">
-            Manage users and platform content.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Admin Panel"
+        description="Manage users and platform content."
+        icon={ShieldAlert}
+        iconBg="bg-red-50"
+        iconColor="text-red-600"
+      />
 
       {/* Tabs */}
       <div className="border-b border-border mb-8">
@@ -219,9 +213,7 @@ export default function AdminPage() {
       {activeTab === "overview" && (
         <>
           {statsLoading ? (
-            <div className="flex justify-center py-16">
-              <Loader2 className="size-5 text-ink-muted animate-spin" />
-            </div>
+            <LoadingSpinner />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {statCards.map((card) => {
@@ -253,17 +245,9 @@ export default function AdminPage() {
       {activeTab === "users" && (
         <div className="bg-surface border border-border rounded-md overflow-hidden">
           {usersLoading ? (
-            <div className="flex justify-center py-16">
-              <Loader2 className="size-5 text-ink-muted animate-spin" />
-            </div>
+            <LoadingSpinner />
           ) : users.length === 0 ? (
-            <div className="py-16 text-center">
-              <Users
-                className="size-8 text-ink-muted mx-auto mb-3"
-                strokeWidth={1.5}
-              />
-              <p className="text-sm text-ink-muted">No users found.</p>
-            </div>
+            <EmptyState icon={Users} heading="No users found" subtext="" />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">

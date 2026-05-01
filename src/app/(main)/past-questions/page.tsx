@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useFiles } from "@/hooks/useFiles";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { AlertBanner } from "@/components/shared/AlertBanner";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FilterPanel } from "@/components/shared/FilterPanel";
 import { FileGrid } from "@/components/files/FileGrid";
@@ -58,23 +60,20 @@ export default function PastQuestionsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="inline-flex size-9 items-center justify-center rounded-md bg-brand-wash">
-          <FileQuestion className="size-4 text-brand" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-semibold text-ink">Past Questions</h1>
-          <p className="text-sm text-ink-muted">
+      <PageHeader
+        title="Past Questions"
+        description={
+          <>
             Exam past questions uploaded by class representatives
             {total > 0 && (
               <span className="ml-1 text-ink-muted">
                 · {total} file{total !== 1 ? "s" : ""}
               </span>
             )}
-          </p>
-        </div>
-      </div>
+          </>
+        }
+        icon={FileQuestion}
+      />
 
       {/* Search */}
       <div className="mb-5">
@@ -106,9 +105,7 @@ export default function PastQuestionsPage() {
 
         <div className="flex-1 min-w-0">
           {error && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-md p-4 mb-4">
-              {error}
-            </div>
+            <AlertBanner type="error" message={error} className="mb-4" />
           )}
           <FileGrid
             files={data}

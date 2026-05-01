@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useBooks } from "@/hooks/useBooks";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FilterPanel } from "@/components/shared/FilterPanel";
 import { BookGrid } from "@/components/library/BookGrid";
@@ -48,13 +49,10 @@ export default function LibraryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-ink mb-2">Library</h1>
-        <p className="text-sm text-ink-muted">
-          Browse textbooks and reference materials by college, department, and
-          subject.
-        </p>
-      </div>
+      <PageHeader
+        title="Library"
+        description="Browse textbooks and reference materials by college, department, and subject."
+      />
 
       <div className="space-y-6">
         {/* Search Bar */}

@@ -1,7 +1,10 @@
 "use client";
 
 import { useNotifications } from "@/hooks/useNotifications";
-import { Bell, Check, ExternalLink, Loader2 } from "lucide-react";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { Bell, Check, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export default function NotificationsPage() {
@@ -11,47 +14,37 @@ export default function NotificationsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-ink mb-1">
-            Notifications
-          </h1>
-          <p className="text-sm text-ink-muted">
-            {unreadCount > 0
-              ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
-              : "You're all caught up"}
-          </p>
-        </div>
-        {unreadCount > 0 && (
-          <button
-            type="button"
-            onClick={markAllAsRead}
-            className="inline-flex items-center gap-2 h-8 px-4 text-sm text-ink-soft hover:text-ink border border-border hover:border-border rounded-md transition-colors bg-surface"
-          >
-            <Check className="size-3.5" />
-            Mark all read
-          </button>
-        )}
-      </div>
+      <PageHeader
+        title="Notifications"
+        description={
+          unreadCount > 0
+            ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
+            : "You're all caught up"
+        }
+        action={
+          unreadCount > 0 ? (
+            <button
+              type="button"
+              onClick={markAllAsRead}
+              className="inline-flex items-center gap-2 h-8 px-4 text-sm text-ink-soft hover:text-ink border border-border hover:border-border rounded-md transition-colors bg-surface"
+            >
+              <Check className="size-3.5" />
+              Mark all read
+            </button>
+          ) : undefined
+        }
+      />
 
       {/* Loading */}
-      {loading && (
-        <div className="flex justify-center py-16">
-          <Loader2 className="size-5 text-ink-muted animate-spin" />
-        </div>
-      )}
+      {loading && <LoadingSpinner />}
 
       {/* Empty */}
       {!loading && notifications.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Bell className="size-10 text-ink-muted mb-3" strokeWidth={1.5} />
-          <p className="text-sm font-medium text-ink mb-1">
-            No notifications yet
-          </p>
-          <p className="text-xs text-ink-muted">
-            You&apos;ll be notified when someone responds to your requests.
-          </p>
-        </div>
+        <EmptyState
+          icon={Bell}
+          heading="No notifications yet"
+          subtext="You'll be notified when someone responds to your requests."
+        />
       )}
 
       {/* List */}
@@ -76,9 +69,7 @@ export default function NotificationsPage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-ink leading-relaxed">
-                  {n.message}
-                </p>
+                <p className="text-sm text-ink leading-relaxed">{n.message}</p>
                 <p className="text-xs text-ink-muted mt-1.5">
                   {new Date(n.created_at).toLocaleString("en-US", {
                     month: "short",

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useFiles } from "@/hooks/useFiles";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { FilterPanel } from "@/components/shared/FilterPanel";
 import { FileGrid } from "@/components/files/FileGrid";
@@ -84,13 +85,10 @@ export default function BrowsePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-ink mb-2">Browse Files</h1>
-        <p className="text-sm text-ink-muted">
-          Search and filter course materials by college, department, programme,
-          and level.
-        </p>
-      </div>
+      <PageHeader
+        title="Browse Files"
+        description="Search and filter course materials by college, department, programme, and level."
+      />
 
       <div className="space-y-6">
         {/* Search Bar */}
