@@ -10,7 +10,7 @@ export default function MainLayout({
   return (
     <UserProvider>
       <AuthGuard>
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-page">
           <Navbar />
           <main className="flex-1">{children}</main>
         </div>

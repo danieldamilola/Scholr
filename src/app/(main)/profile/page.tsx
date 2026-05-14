@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { createClientSingleton } from "@/lib/supabase/client";
-import {
-  User,
-  Lock,
-  Loader2,
-  CheckCircle2,
-  AlertCircle,
-  ChevronRight,
-} from "lucide-react";
+import { User, Lock, Loader2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AlertBanner } from "@/components/shared/AlertBanner";
+import { FormField } from "@/components/shared/FormField";
+import { PasswordField } from "@/components/shared/PasswordField";
+import { ReadOnlyField } from "@/components/shared/ReadOnlyField";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import {
   Select,
   SelectContent,
@@ -28,115 +27,6 @@ const TABS: { id: Tab; label: string; icon: typeof User }[] = [
   { id: "profile", label: "Profile Information", icon: User },
   { id: "password", label: "Account Security", icon: Lock },
 ];
-
-// ─── Reusable field row ───
-function Field({
-  label,
-  required,
-  children,
-  hint,
-}: {
-  label: string;
-  required?: boolean;
-  children: React.ReactNode;
-  hint?: string;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label className="block text-sm font-medium text-zinc-700">
-        {label}
-        {required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      {children}
-      {hint && <p className="text-xs text-zinc-400">{hint}</p>}
-    </div>
-  );
-}
-
-// ─── Read-only input ───
-function ReadOnlyInput({ value }: { value: string }) {
-  return (
-    <div className="flex h-9 w-full items-center rounded-md border border-zinc-200 bg-zinc-50 px-3 text-sm text-zinc-500 select-none">
-      {value}
-    </div>
-  );
-}
-
-// ─── Editable text input ───
-function TextInput({
-  value,
-  onChange,
-  placeholder,
-  disabled,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-}) {
-  return (
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      disabled={disabled}
-      className="flex h-9 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent disabled:opacity-50 transition-shadow"
-    />
-  );
-}
-
-// ─── Password input ───
-function PasswordInput({
-  id,
-  value,
-  onChange,
-  placeholder,
-  disabled,
-}: {
-  id: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-}) {
-  return (
-    <input
-      id={id}
-      type="password"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      disabled={disabled}
-      className="flex h-9 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent disabled:opacity-50 transition-shadow"
-    />
-  );
-}
-
-// ─── Toast message ───
-function Toast({
-  message,
-}: {
-  message: { type: "success" | "error"; text: string };
-}) {
-  return (
-    <div
-      className={cn(
-        "flex items-start gap-2.5 p-3 rounded-md text-sm border",
-        message.type === "success"
-          ? "bg-green-50 border-green-200 text-green-700"
-          : "bg-red-50 border-red-200 text-red-700",
-      )}
-    >
-      {message.type === "success" ? (
-        <CheckCircle2 className="size-4 shrink-0 mt-0.5" />
-      ) : (
-        <AlertCircle className="size-4 shrink-0 mt-0.5" />
-      )}
-      {message.text}
-    </div>
-  );
-}
 
 // ─── Profile Form ───
 function ProfileForm({
@@ -209,34 +99,36 @@ function ProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {toast && <Toast message={toast} />}
+      {toast && <AlertBanner type={toast.type} message={toast.text} />}
 
       {/* Read-only row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Full Name" hint="Name cannot be changed">
-          <ReadOnlyInput value={profile?.full_name || "—"} />
-        </Field>
-        <Field label="Email" hint="Email cannot be changed">
-          <ReadOnlyInput
-            value={profile?.email || user.session?.user?.email || "—"}
-          />
-        </Field>
+        <ReadOnlyField
+          label="Full Name"
+          value={profile?.full_name || "—"}
+          hint="Name cannot be changed"
+        />
+        <ReadOnlyField
+          label="Email"
+          value={profile?.email || user.session?.user?.email || "—"}
+          hint="Email cannot be changed"
+        />
       </div>
 
       {/* Role — read-only */}
-      <Field label="Role" hint="Contact an admin to change your role">
-        <ReadOnlyInput value={profile?.role?.replace("_", " ") || "—"} />
-      </Field>
+      <ReadOnlyField
+        label="Role"
+        value={profile?.role?.replace("_", " ") || "—"}
+        hint="Contact an admin to change your role"
+      />
 
       {profile?.role !== "librarian" && (
         <>
-          <hr className="border-zinc-100" />
-          <p className="text-sm font-medium text-zinc-900">
-            Academic Information
-          </p>
+          <hr className="border-border" />
+          <p className="text-sm font-medium text-ink">Academic Information</p>
 
           {/* College */}
-          <Field label="College">
+          <FormField label="College">
             <Select value={college} onValueChange={handleCollegeChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select college" />
@@ -249,10 +141,10 @@ function ProfileForm({
                 ))}
               </SelectContent>
             </Select>
-          </Field>
+          </FormField>
 
           {/* Department */}
-          <Field label="Department">
+          <FormField label="Department">
             <Select
               value={department}
               onValueChange={handleDeptChange}
@@ -273,10 +165,10 @@ function ProfileForm({
                 ))}
               </SelectContent>
             </Select>
-          </Field>
+          </FormField>
 
           {/* Programme */}
-          <Field label="Programme">
+          <FormField label="Programme">
             <Select
               value={programme}
               onValueChange={setProgramme}
@@ -297,10 +189,10 @@ function ProfileForm({
                 ))}
               </SelectContent>
             </Select>
-          </Field>
+          </FormField>
 
           {/* Level */}
-          <Field label="Level">
+          <FormField label="Level">
             <Select value={level} onValueChange={setLevel}>
               <SelectTrigger>
                 <SelectValue placeholder="Select level" />
@@ -313,7 +205,7 @@ function ProfileForm({
                 ))}
               </SelectContent>
             </Select>
-          </Field>
+          </FormField>
         </>
       )}
 
@@ -321,7 +213,7 @@ function ProfileForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="inline-flex items-center gap-2 h-9 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
+          className="inline-flex items-center gap-2 h-9 px-5 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
         >
           {isLoading && <Loader2 className="size-4 animate-spin" />}
           {isLoading ? "Saving…" : "Save Changes"}
@@ -379,37 +271,35 @@ function PasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {toast && <Toast message={toast} />}
+      {toast && <AlertBanner type={toast.type} message={toast.text} />}
 
-      <div className="p-4 bg-zinc-50 border border-zinc-200 rounded-md text-sm text-zinc-600">
+      <div className="p-4 bg-subtle border border-border rounded-md text-sm text-ink-muted">
         Choose a strong password with at least 8 characters.
       </div>
 
-      <Field label="New Password">
-        <PasswordInput
-          id="newPassword"
-          value={newPassword}
-          onChange={setNewPassword}
-          placeholder="Minimum 8 characters"
-          disabled={isLoading}
-        />
-      </Field>
+      <PasswordField
+        id="newPassword"
+        label="New Password"
+        value={newPassword}
+        onChange={setNewPassword}
+        placeholder="Minimum 8 characters"
+        disabled={isLoading}
+      />
 
-      <Field label="Confirm New Password">
-        <PasswordInput
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={setConfirmPassword}
-          placeholder="Re-enter new password"
-          disabled={isLoading}
-        />
-      </Field>
+      <PasswordField
+        id="confirmPassword"
+        label="Confirm New Password"
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        placeholder="Re-enter new password"
+        disabled={isLoading}
+      />
 
       <div className="pt-1">
         <button
           type="submit"
           disabled={isLoading || !newPassword || !confirmPassword}
-          className="inline-flex items-center gap-2 h-9 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
+          className="inline-flex items-center gap-2 h-9 px-5 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md disabled:opacity-50 transition-colors"
         >
           {isLoading && <Loader2 className="size-4 animate-spin" />}
           {isLoading ? "Updating…" : "Update Password"}
@@ -426,18 +316,16 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto max-w-5xl px-4 py-10">
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="size-5 text-zinc-400 animate-spin" />
-        </div>
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <LoadingSpinner />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="container mx-auto max-w-5xl px-4 py-10">
-        <p className="text-sm text-zinc-500">
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <p className="text-sm text-ink-muted">
           Please log in to view your profile.
         </p>
       </div>
@@ -453,48 +341,43 @@ export default function ProfilePage() {
       .toUpperCase() || "?";
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-10">
-      {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-[24px] font-semibold text-zinc-900 mb-1">
-          Profile & Settings
-        </h1>
-        <p className="text-[14px] text-zinc-500">
-          Manage your academic details and account security.
-        </p>
-      </div>
+    <div className="max-w-5xl mx-auto px-4 py-10">
+      <PageHeader
+        title="Profile & Settings"
+        description="Manage your academic details and account security."
+      />
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* ─── Left sidebar ─── */}
         <div className="lg:w-64 shrink-0 space-y-3">
           {/* Avatar card */}
-          <div className="bg-white border border-zinc-200 rounded-md p-5 flex flex-col items-center text-center">
-            <div className="flex size-16 items-center justify-center rounded-full bg-zinc-100 text-zinc-700 text-2xl font-semibold mb-3">
+          <div className="bg-surface border border-border rounded-md p-5 flex flex-col items-center text-center">
+            <div className="flex size-16 items-center justify-center rounded-full bg-subtle text-ink text-2xl font-semibold mb-3">
               {initials}
             </div>
-            <p className="text-sm font-semibold text-zinc-900 leading-tight">
+            <p className="text-sm font-semibold text-ink leading-tight">
               {user.profile?.full_name}
             </p>
-            <p className="text-xs text-zinc-400 mt-0.5">
+            <p className="text-xs text-ink-muted mt-0.5">
               {user.profile?.email || user.session?.user?.email}
             </p>
-            <span className="mt-2 inline-block bg-zinc-100 text-zinc-500 text-xs px-2 py-0.5 rounded-full capitalize">
+            <span className="mt-2 inline-block bg-subtle text-ink-muted text-xs px-2 py-0.5 rounded-sm capitalize">
               {user.profile?.role?.replace("_", " ")}
             </span>
           </div>
 
           {/* Tab nav */}
-          <nav className="bg-white border border-zinc-200 rounded-md overflow-hidden">
+          <nav className="bg-surface border border-border rounded-md overflow-hidden">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => setActiveTab(id)}
                 className={cn(
-                  "w-full flex items-center justify-between gap-2.5 px-4 py-3 text-sm transition-colors border-b border-zinc-100 last:border-0",
+                  "w-full flex items-center justify-between gap-2.5 px-4 py-3 text-sm transition-colors border-b border-border last:border-0",
                   activeTab === id
-                    ? "bg-blue-50 text-blue-700 font-medium"
-                    : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900",
+                    ? "bg-brand-wash text-brand font-medium"
+                    : "text-ink-soft hover:bg-subtle hover:text-ink",
                 )}
               >
                 <span className="flex items-center gap-2.5">
@@ -504,7 +387,7 @@ export default function ProfilePage() {
                 <ChevronRight
                   className={cn(
                     "size-3.5 transition-colors",
-                    activeTab === id ? "text-blue-400" : "text-zinc-300",
+                    activeTab === id ? "text-brand-muted" : "text-ink-muted",
                   )}
                 />
               </button>
@@ -514,13 +397,13 @@ export default function ProfilePage() {
 
         {/* ─── Right content ─── */}
         <div className="flex-1 min-w-0">
-          <div className="bg-white border border-zinc-200 rounded-md">
+          <div className="bg-surface border border-border rounded-md">
             {/* Card header */}
-            <div className="px-6 py-4 border-b border-zinc-200">
-              <h2 className="text-[15px] font-semibold text-zinc-900">
+            <div className="px-6 py-4 border-b border-border">
+              <h2 className="text-[15px] font-semibold text-ink">
                 {TABS.find((t) => t.id === activeTab)?.label}
               </h2>
-              <p className="text-[13px] text-zinc-400 mt-0.5">
+              <p className="text-[13px] text-ink-muted mt-0.5">
                 {activeTab === "profile"
                   ? "Update your academic information. Name, email, and role are read-only."
                   : "Set a new password for your Scholr account."}

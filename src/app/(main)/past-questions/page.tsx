@@ -1,35 +1,37 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useFiles } from '@/hooks/useFiles'
-import { useBookmarks } from '@/hooks/useBookmarks'
-import { SearchBar } from '@/components/shared/SearchBar'
-import { FilterPanel } from '@/components/shared/FilterPanel'
-import { FileGrid } from '@/components/files/FileGrid'
-import { FileQuestion } from 'lucide-react'
+import { useState, useEffect } from "react";
+import { useFiles } from "@/hooks/useFiles";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { AlertBanner } from "@/components/shared/AlertBanner";
+import { SearchBar } from "@/components/shared/SearchBar";
+import { FilterPanel } from "@/components/shared/FilterPanel";
+import { FileGrid } from "@/components/files/FileGrid";
+import { FileQuestion } from "lucide-react";
 
 export default function PastQuestionsPage() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
-  const [college, setCollege] = useState('')
-  const [department, setDepartment] = useState('')
-  const [programme, setProgramme] = useState('')
-  const [level, setLevel] = useState('')
-  const [semester, setSemester] = useState('')
-  const [page, setPage] = useState(1)
-  const [sortBy, setSortBy] = useState<'newest' | 'most_downloaded'>('newest')
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [college, setCollege] = useState("");
+  const [department, setDepartment] = useState("");
+  const [programme, setProgramme] = useState("");
+  const [level, setLevel] = useState("");
+  const [semester, setSemester] = useState("");
+  const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState<"newest" | "most_downloaded">("newest");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery)
-      setPage(1)
-    }, 400)
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+      setDebouncedSearchQuery(searchQuery);
+      setPage(1);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
-    setPage(1)
-  }, [college, department, programme, level, semester, sortBy])
+    setPage(1);
+  }, [college, department, programme, level, semester, sortBy]);
 
   const { data, loading, error, total } = useFiles({
     college,
@@ -40,37 +42,38 @@ export default function PastQuestionsPage() {
     searchQuery: debouncedSearchQuery,
     sortBy,
     page,
-    materialType: 'past_question',
-  })
+    materialType: "past_question",
+  });
 
-  const { bookmarkedFileIds, toggleBookmark } = useBookmarks()
+  const { bookmarkedFileIds, toggleBookmark } = useBookmarks();
 
   const handleCollegeChange = (value: string) => {
-    setCollege(value)
-    setDepartment('')
-    setProgramme('')
-  }
+    setCollege(value);
+    setDepartment("");
+    setProgramme("");
+  };
 
   const handleDepartmentChange = (value: string) => {
-    setDepartment(value)
-    setProgramme('')
-  }
+    setDepartment(value);
+    setProgramme("");
+  };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="inline-flex size-9 items-center justify-center rounded-md bg-blue-50">
-          <FileQuestion className="size-4 text-blue-600" />
-        </div>
-        <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Past Questions</h1>
-          <p className="text-sm text-zinc-500">
+    <div className="mx-auto max-w-7xl px-4 py-10">
+      <PageHeader
+        title="Past Questions"
+        description={
+          <>
             Exam past questions uploaded by class representatives
-            {total > 0 && <span className="ml-1 text-zinc-400">· {total} file{total !== 1 ? 's' : ''}</span>}
-          </p>
-        </div>
-      </div>
+            {total > 0 && (
+              <span className="ml-1 text-ink-muted">
+                · {total} file{total !== 1 ? "s" : ""}
+              </span>
+            )}
+          </>
+        }
+        icon={FileQuestion}
+      />
 
       {/* Search */}
       <div className="mb-5">
@@ -102,15 +105,17 @@ export default function PastQuestionsPage() {
 
         <div className="flex-1 min-w-0">
           {error && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-md p-4 mb-4">
-              {error}
-            </div>
+            <AlertBanner type="error" message={error} className="mb-4" />
           )}
           <FileGrid
             files={data}
             loading={loading}
             bookmarkedFileIds={bookmarkedFileIds}
-            onBookmarkToggle={async (id) => { try { await toggleBookmark(id) } catch {} }}
+            onBookmarkToggle={async (id) => {
+              try {
+                await toggleBookmark(id);
+              } catch {}
+            }}
             emptyMessage="No past questions found"
             emptySubMessage="Past questions uploaded by class reps will appear here."
           />
@@ -118,23 +123,24 @@ export default function PastQuestionsPage() {
           {/* Pagination */}
           {!loading && total > 20 && (
             <div className="mt-6 flex items-center justify-between">
-              <p className="text-xs text-zinc-400">
-                Showing {Math.min((page - 1) * 20 + 1, total)}–{Math.min(page * 20, total)} of {total}
+              <p className="text-xs text-ink-muted">
+                Showing {Math.min((page - 1) * 20 + 1, total)}–
+                {Math.min(page * 20, total)} of {total}
               </p>
               <div className="flex gap-2">
                 <button
                   type="button"
                   disabled={page === 1}
-                  onClick={() => setPage(p => p - 1)}
-                  className="h-8 px-3 text-xs border border-zinc-200 rounded-md text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  onClick={() => setPage((p) => p - 1)}
+                  className="h-8 px-3 text-xs border border-border rounded-md text-ink-soft hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   Previous
                 </button>
                 <button
                   type="button"
                   disabled={page * 20 >= total}
-                  onClick={() => setPage(p => p + 1)}
-                  className="h-8 px-3 text-xs border border-zinc-200 rounded-md text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  onClick={() => setPage((p) => p + 1)}
+                  className="h-8 px-3 text-xs border border-border rounded-md text-ink-soft hover:bg-subtle disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
                   Next
                 </button>
@@ -144,5 +150,5 @@ export default function PastQuestionsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

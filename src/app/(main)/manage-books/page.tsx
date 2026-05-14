@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { createClientSingleton } from "@/lib/supabase/client";
 import type { BookRecord } from "@/types";
 import { Trash2, BookOpen, Loader2, ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,7 +27,7 @@ export default function ManageBooksPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     const supabase = createClientSingleton();
     const { data } = await supabase
       .from("books")
@@ -34,11 +36,11 @@ export default function ManageBooksPage() {
       .order("created_at", { ascending: false });
     setBooks((data as BookRecord[]) || []);
     setLoading(false);
-  };
+  }, [user?.session?.user?.id]);
 
   useEffect(() => {
     if (user?.session?.user?.id) fetchBooks();
-  }, [user?.session?.user?.id]);
+  }, [fetchBooks]);
 
   const handleDelete = async () => {
     if (!deletingId) return;
@@ -65,7 +67,7 @@ export default function ManageBooksPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <ShieldAlert className="size-10 text-red-400 mb-3" />
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-ink-muted">
           Only librarians can manage books.
         </p>
       </div>
@@ -74,61 +76,55 @@ export default function ManageBooksPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 mb-1">
-            My Books
-          </h1>
-          <p className="text-sm text-zinc-500">
-            Manage books you uploaded to the library.
-          </p>
-        </div>
-        <Link
-          href="/library/upload"
-          className="inline-flex items-center gap-2 h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
-        >
-          + Upload Book
-        </Link>
-      </div>
+      <PageHeader
+        title="My Books"
+        description="Manage books you uploaded to the library."
+        action={
+          <Link
+            href="/library/upload"
+            className="inline-flex items-center gap-2 h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
+          >
+            + Upload Book
+          </Link>
+        }
+      />
 
       {loading ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="size-5 text-zinc-400 animate-spin" />
-        </div>
+        <LoadingSpinner />
       ) : books.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <BookOpen className="size-10 text-zinc-300 mb-3" strokeWidth={1.5} />
-          <p className="text-sm font-medium text-zinc-900 mb-1">
+          <BookOpen className="size-10 text-ink-muted mb-3" strokeWidth={1.5} />
+          <p className="text-sm font-medium text-ink mb-1">
             No books uploaded yet
           </p>
-          <p className="text-xs text-zinc-400 mb-4">
+          <p className="text-xs text-ink-muted mb-4">
             Start by uploading a book to the library.
           </p>
           <Link
             href="/library/upload"
-            className="inline-flex items-center gap-2 h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            className="inline-flex items-center gap-2 h-9 px-4 bg-brand hover:bg-brand-hover text-white text-sm font-medium rounded-md transition-colors"
           >
             Upload First Book
           </Link>
         </div>
       ) : (
-        <div className="bg-white border border-zinc-200 rounded-[10px] overflow-hidden">
+        <div className="bg-surface border border-border rounded-md overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-zinc-200 bg-zinc-50">
-                <th className="text-left py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wide">
+              <tr className="border-b border-border bg-subtle">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-ink-muted uppercase tracking-wide">
                   Book
                 </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wide hidden md:table-cell">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-ink-muted uppercase tracking-wide hidden md:table-cell">
                   Department
                 </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wide hidden lg:table-cell">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-ink-muted uppercase tracking-wide hidden lg:table-cell">
                   Downloads
                 </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wide hidden lg:table-cell">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-ink-muted uppercase tracking-wide hidden lg:table-cell">
                   Added
                 </th>
-                <th className="text-right py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wide">
+                <th className="text-right py-3 px-4 text-xs font-semibold text-ink-muted uppercase tracking-wide">
                   Actions
                 </th>
               </tr>
@@ -137,23 +133,23 @@ export default function ManageBooksPage() {
               {books.map((book) => (
                 <tr
                   key={book.id}
-                  className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 transition-colors"
+                  className="border-b border-border last:border-0 hover:bg-subtle transition-colors"
                 >
                   <td className="py-3 px-4">
-                    <p className="text-sm font-medium text-zinc-900 truncate max-w-[220px]">
+                    <p className="text-sm font-medium text-ink truncate max-w-55">
                       {book.title}
                     </p>
                     {book.author && (
-                      <p className="text-xs text-zinc-400">{book.author}</p>
+                      <p className="text-xs text-ink-muted">{book.author}</p>
                     )}
                   </td>
-                  <td className="py-3 px-4 text-sm text-zinc-500 hidden md:table-cell">
+                  <td className="py-3 px-4 text-sm text-ink-muted hidden md:table-cell">
                     {book.department || "—"}
                   </td>
-                  <td className="py-3 px-4 text-sm text-zinc-500 hidden lg:table-cell">
+                  <td className="py-3 px-4 text-sm text-ink-muted hidden lg:table-cell">
                     {book.downloads}
                   </td>
-                  <td className="py-3 px-4 text-sm text-zinc-500 hidden lg:table-cell">
+                  <td className="py-3 px-4 text-sm text-ink-muted hidden lg:table-cell">
                     {new Date(book.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3 px-4 text-right">
@@ -162,7 +158,7 @@ export default function ManageBooksPage() {
                         <button
                           type="button"
                           onClick={() => setDeletingId(book.id)}
-                          className="inline-flex items-center justify-center p-1.5 rounded-md text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                          className="inline-flex items-center justify-center p-1.5 rounded-md text-ink-muted hover:text-red-600 hover:bg-red-50 transition-colors"
                           title="Delete book"
                         >
                           <Trash2 className="size-4" />

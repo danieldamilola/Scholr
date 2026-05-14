@@ -34,28 +34,28 @@ export function ThreadCard({ thread }: ThreadCardProps) {
   }
 
   return (
-    <div className="border border-zinc-200 rounded-md p-4 space-y-4 hover:border-zinc-300 transition-all duration-150 hover:shadow-md">
+    <div className="border border-border rounded-md p-4 space-y-4 hover:shadow-md transition-all duration-150">
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-zinc-200 flex items-center justify-center">
-            <User className="size-5 text-zinc-500" />
+          <div className="w-10 h-10 rounded-full bg-subtle flex items-center justify-center">
+            <User className="size-5 text-ink-muted" />
           </div>
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium text-zinc-900">{thread.user.full_name || 'Anonymous'}</span>
-            <span className="text-xs text-zinc-500">
+            <span className="font-medium text-ink">{thread.user.full_name || 'Anonymous'}</span>
+            <span className="text-xs text-ink-muted">
               {new Date(thread.created_at).toLocaleDateString()}
             </span>
           </div>
-          <p className="text-sm text-zinc-700">{thread.content}</p>
+          <p className="text-sm text-ink-soft">{thread.content}</p>
         </div>
       </div>
 
       <div className="flex items-center gap-4 ml-13">
         <button
           onClick={() => setShowReplyForm(!showReplyForm)}
-          className="flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+          className="flex items-center gap-1 text-sm text-ink-muted hover:text-ink transition-colors"
         >
           <MessageSquare className="h-4 w-4" />
           Reply ({thread.replies.length})

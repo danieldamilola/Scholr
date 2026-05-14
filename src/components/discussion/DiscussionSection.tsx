@@ -35,8 +35,8 @@ export function DiscussionSection({ fileId }: DiscussionSectionProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-4">
-        <MessageSquare className="size-4 text-zinc-700" />
-        <h3 className="text-lg font-semibold text-zinc-900">Discussion</h3>
+        <MessageSquare className="size-4 text-ink-soft" />
+        <h3 className="text-lg font-semibold text-ink">Discussion</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -57,9 +57,9 @@ export function DiscussionSection({ fileId }: DiscussionSectionProps) {
       </form>
 
       {loading ? (
-        <div className="text-center py-8 text-zinc-500">Loading discussions...</div>
+        <div className="text-center py-8 text-ink-muted">Loading discussions...</div>
       ) : threads.length === 0 ? (
-        <div className="text-center py-8 text-zinc-500">
+        <div className="text-center py-8 text-ink-muted">
           No discussions yet. Be the first to ask a question!
         </div>
       ) : (

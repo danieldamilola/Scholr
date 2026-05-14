@@ -1,21 +1,21 @@
-import { FileText } from 'lucide-react'
-import type { FileRecord } from '@/types'
-import { FileCard } from './FileCard'
-import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton'
-import { EmptyState } from '@/components/shared/EmptyState'
+import { FileText } from "lucide-react";
+import type { FileRecord } from "@/types";
+import { FileCard } from "./FileCard";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 interface FileGridProps {
-  files: FileRecord[]
-  loading: boolean
-  error?: string | null
-  total?: number
-  page?: number
-  pageSize?: number
-  onPageChange?: (page: number) => void
-  bookmarkedFileIds?: Set<string>
-  onBookmarkToggle?: (fileId: string) => void
-  emptyMessage?: string
-  emptySubMessage?: string
+  files: FileRecord[];
+  loading: boolean;
+  error?: string | null;
+  total?: number;
+  page?: number;
+  pageSize?: number;
+  onPageChange?: (page: number) => void;
+  bookmarkedFileIds?: Set<string>;
+  onBookmarkToggle?: (fileId: string) => void;
+  emptyMessage?: string;
+  emptySubMessage?: string;
 }
 
 export function FileGrid({
@@ -28,13 +28,13 @@ export function FileGrid({
   onPageChange,
   bookmarkedFileIds = new Set(),
   onBookmarkToggle,
-  emptyMessage = 'No files found',
-  emptySubMessage = 'Try adjusting your filters or search terms',
+  emptyMessage = "No files found",
+  emptySubMessage = "Try adjusting your filters or search terms",
 }: FileGridProps) {
-  const totalPages = Math.ceil(total / pageSize)
+  const totalPages = Math.ceil(total / pageSize);
 
   if (loading) {
-    return <LoadingSkeleton variant="card" count={8} />
+    return <LoadingSkeleton variant="card" count={8} />;
   }
 
   if (error) {
@@ -42,7 +42,7 @@ export function FileGrid({
       <div className="text-center py-12">
         <p className="text-red-600">Error: {error}</p>
       </div>
-    )
+    );
   }
 
   if (files.length === 0) {
@@ -52,7 +52,7 @@ export function FileGrid({
         heading={emptyMessage}
         subtext={emptySubMessage}
       />
-    )
+    );
   }
 
   return (
@@ -63,7 +63,9 @@ export function FileGrid({
             key={file.id}
             file={file}
             isBookmarked={bookmarkedFileIds.has(file.id)}
-            onBookmarkToggle={onBookmarkToggle ? () => onBookmarkToggle(file.id) : undefined}
+            onBookmarkToggle={
+              onBookmarkToggle ? () => onBookmarkToggle(file.id) : undefined
+            }
           />
         ))}
       </div>
@@ -73,22 +75,22 @@ export function FileGrid({
           <button
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
-            className="px-4 py-2 border border-zinc-200 rounded-md text-sm text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-9 px-4 py-2 border border-border rounded-md text-sm text-ink-soft bg-surface hover:bg-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
-          <span className="text-sm text-zinc-600">
+          <span className="text-sm text-ink-muted">
             Page {page} of {totalPages}
           </span>
           <button
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
-            className="px-4 py-2 border border-zinc-200 rounded-md text-sm text-zinc-700 hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-9 px-4 py-2 border border-border rounded-md text-sm text-ink-soft bg-surface hover:bg-subtle disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>
         </div>
       )}
     </div>
-  )
+  );
 }
