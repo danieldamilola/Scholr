@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClientSingleton } from "@/lib/supabase/client";
 import type { FileRecord, BookRecord } from "@/types";
+import ContentTable from "@/components/admin/ContentTable";
 
 export default function AdminContentPage() {
   const [files, setFiles] = useState<FileRecord[]>([]);
@@ -11,40 +12,86 @@ export default function AdminContentPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"files" | "books">("files");
 
-  useEffect(() => {
-    async function fetchContent() {
-      try {
-        const supabase = createClientSingleton();
+  const fetchContent = async () => {
+    try {
+      const supabase = createClientSingleton();
 
-        const [filesData, booksData] = await Promise.all([
-          supabase
-            .from("files")
-            .select("*")
-            .order("created_at", { ascending: false })
-            .limit(20),
-          supabase
-            .from("books")
-            .select("*")
-            .order("created_at", { ascending: false })
-            .limit(20),
-        ]);
+      const [filesData, booksData] = await Promise.all([
+        supabase
+          .from("files")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20),
+        supabase
+          .from("books")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .limit(20),
+      ]);
 
-        if (filesData.error) throw filesData.error;
-        if (booksData.error) throw booksData.error;
+      if (filesData.error) throw filesData.error;
+      if (booksData.error) throw booksData.error;
 
-        setFiles((filesData.data || []) as FileRecord[]);
-        setBooks((booksData.data || []) as BookRecord[]);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch content",
-        );
-      } finally {
-        setLoading(false);
-      }
+      setFiles((filesData.data || []) as FileRecord[]);
+      setBooks((booksData.data || []) as BookRecord[]);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch content",
+      );
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchContent();
   }, []);
+
+  const handleDeleteFile = async (fileId: string) => {
+    try {
+      const response = await fetch("/api/admin/delete-file", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to delete file");
+      }
+
+      // Refresh the content list after successful deletion
+      await fetchContent();
+    } catch (error) {
+      alert(
+        error instanceof Error ? error.message : "Failed to delete file",
+      );
+      throw error;
+    }
+  };
+
+  const handleDeleteBook = async (bookId: string) => {
+    try {
+      const response = await fetch("/api/admin/delete-book", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to delete book");
+      }
+
+      // Refresh the content list after successful deletion
+      await fetchContent();
+    } catch (error) {
+      alert(
+        error instanceof Error ? error.message : "Failed to delete book",
+      );
+      throw error;
+    }
+  };
 
   return (
     <div className="p-8">
@@ -87,79 +134,13 @@ export default function AdminContentPage() {
           {activeTab === "files" ? "No files found." : "No books found."}
         </div>
       ) : (
-        <div className="bg-surface border border-border rounded-md overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-subtle border-b border-border">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  {activeTab === "files" ? "Course Code" : "Author"}
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  College
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  Department
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  Uploaded By
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-ink-muted uppercase">
-                  Date
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {activeTab === "files"
-                ? files.map((file) => (
-                    <tr key={file.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink">
-                        {file.title}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {file.course_code}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {file.college}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {file.department}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {file.uploader_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {new Date(file.created_at).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))
-                : books.map((book) => (
-                    <tr key={book.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink">
-                        {book.title}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {book.author}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {book.college}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {book.department}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {book.uploader_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ink-soft">
-                        {new Date(book.created_at).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
-        </div>
+        <ContentTable
+          activeTab={activeTab}
+          files={files}
+          books={books}
+          onDeleteFile={handleDeleteFile}
+          onDeleteBook={handleDeleteBook}
+        />
       )}
     </div>
   );

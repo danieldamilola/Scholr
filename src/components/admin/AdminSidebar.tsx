@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, FileText } from "lucide-react";
 import { createClientSingleton } from "@/lib/supabase/client";
 
 const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/users", icon: Users, label: "Users" },
+  { href: "/admin/content", icon: FileText, label: "Content" },
 ];
 
 export function AdminSidebar() {
