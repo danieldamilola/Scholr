@@ -1,10 +1,15 @@
-export type UserRole = 'student' | 'lecturer' | 'class_rep' | 'admin' | 'librarian';
+export type UserRole =
+  | "student"
+  | "lecturer"
+  | "class_rep"
+  | "admin"
+  | "librarian";
 
-export type FileType = 'PDF' | 'DOCX' | 'PPTX' | 'PNG' | 'JPG' | 'JPEG' | 'TXT';
+export type FileType = "PDF" | "DOCX" | "PPTX" | "PNG" | "JPG" | "JPEG" | "TXT";
 
-export type Semester = 'First' | 'Second';
+export type Semester = "First" | "Second";
 
-export type Level = '100' | '200' | '300' | '400' | '500';
+export type Level = "100" | "200" | "300" | "400" | "500";
 
 export interface UserProfile {
   id: string;
@@ -104,4 +109,53 @@ export interface DiscussionThreadWithReplies extends DiscussionThread {
 
 export interface NotificationWithFile extends Notification {
   file?: FileRecord;
+}
+
+// Database insert/update payloads
+export interface BookInsert {
+  title: string;
+  author?: string | null;
+  description?: string | null;
+  college: string;
+  department: string;
+  subject?: string | null;
+  file_url: string;
+  storage_path: string;
+  cover_url?: string | null;
+  text_content?: string | null;
+  uploaded_by: string;
+  uploader_name: string;
+}
+
+export interface BookmarkInsert {
+  user_id: string;
+  file_id: string;
+}
+
+export interface RequestInsert {
+  requester_id: string;
+  requester_name: string;
+  requester_role: string;
+  target_role: string;
+  target_id?: string | null;
+  target_name?: string | null;
+  type: string;
+  title: string;
+  description?: string | null;
+  course_code?: string | null;
+  college?: string | null;
+  department?: string | null;
+}
+
+export interface RequestUpdate {
+  status: "approved" | "denied";
+  response_message?: string | null;
+  responded_by: string;
+  responded_at: string;
+}
+
+export interface NotificationInsert {
+  user_id: string;
+  message: string;
+  link?: string;
 }

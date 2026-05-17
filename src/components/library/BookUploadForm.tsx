@@ -189,6 +189,7 @@ export function BookUploadForm() {
         textContent = await extractTextFromFile(file);
       } catch {}
 
+      // @ts-expect-error - Supabase requires Database generic for typed inserts
       const { error: insertError } = await supabase.from("books").insert({
         title,
         author,
@@ -202,7 +203,7 @@ export function BookUploadForm() {
         text_content: textContent,
         uploaded_by: userId,
         uploader_name: user.profile.full_name,
-      } as any);
+      });
 
       if (insertError) {
         await supabase.storage.from("library-books").remove([filePath]);

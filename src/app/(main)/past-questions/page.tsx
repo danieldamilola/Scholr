@@ -29,9 +29,25 @@ export default function PastQuestionsPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  useEffect(() => {
+  const handleProgrammeChange = (value: string) => {
+    setProgramme(value);
     setPage(1);
-  }, [college, department, programme, level, semester, sortBy]);
+  };
+
+  const handleLevelChange = (value: string) => {
+    setLevel(value);
+    setPage(1);
+  };
+
+  const handleSemesterChange = (value: string) => {
+    setSemester(value);
+    setPage(1);
+  };
+
+  const handleSortByChange = (value: "newest" | "most_downloaded") => {
+    setSortBy(value);
+    setPage(1);
+  };
 
   const { data, loading, error, total } = useFiles({
     college,
@@ -51,11 +67,13 @@ export default function PastQuestionsPage() {
     setCollege(value);
     setDepartment("");
     setProgramme("");
+    setPage(1);
   };
 
   const handleDepartmentChange = (value: string) => {
     setDepartment(value);
     setProgramme("");
+    setPage(1);
   };
 
   return (
@@ -96,10 +114,10 @@ export default function PastQuestionsPage() {
             sortBy={sortBy}
             onCollegeChange={handleCollegeChange}
             onDepartmentChange={handleDepartmentChange}
-            onProgrammeChange={setProgramme}
-            onLevelChange={setLevel}
-            onSemesterChange={setSemester}
-            onSortByChange={setSortBy}
+            onProgrammeChange={handleProgrammeChange}
+            onLevelChange={handleLevelChange}
+            onSemesterChange={handleSemesterChange}
+            onSortByChange={handleSortByChange}
           />
         </aside>
 

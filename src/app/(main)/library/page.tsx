@@ -28,10 +28,20 @@ export default function LibraryPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Reset page when filters change
-  useEffect(() => {
+  const handleDepartmentChange = (value: string) => {
+    setDepartment(value);
     setPage(1);
-  }, [college, department, subject, sortBy]);
+  };
+
+  const handleSubjectChange = (value: string) => {
+    setSubject(value);
+    setPage(1);
+  };
+
+  const handleSortByChange = (value: "newest" | "most_downloaded") => {
+    setSortBy(value);
+    setPage(1);
+  };
 
   const { data, loading, error, total } = useBooks({
     college,
@@ -45,6 +55,7 @@ export default function LibraryPage() {
   const handleCollegeChange = (value: string) => {
     setCollege(value);
     setDepartment("");
+    setPage(1);
   };
 
   return (
@@ -70,8 +81,8 @@ export default function LibraryPage() {
           level={level}
           semester={semester}
           onCollegeChange={handleCollegeChange}
-          onDepartmentChange={setDepartment}
-          onProgrammeChange={setSubject}
+          onDepartmentChange={handleDepartmentChange}
+          onProgrammeChange={handleSubjectChange}
           onLevelChange={setLevel}
           onSemesterChange={setSemester}
         />
@@ -84,7 +95,7 @@ export default function LibraryPage() {
           <select
             value={sortBy}
             onChange={(e) =>
-              setSortBy(e.target.value as "newest" | "most_downloaded")
+              handleSortByChange(e.target.value as "newest" | "most_downloaded")
             }
             className="border border-border rounded-md text-sm text-ink-soft px-3 py-2 bg-surface"
           >

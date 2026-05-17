@@ -39,7 +39,7 @@ export default function BookmarksPage() {
           return;
         }
 
-        const fileIds = bookmarks.map((b: any) => b.file_id);
+        const fileIds = bookmarks.map((b: { file_id: string }) => b.file_id);
 
         // Fetch file details
         const { data: filesData, error: filesError } = await supabase

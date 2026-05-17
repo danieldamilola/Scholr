@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { createClientSingleton } from "@/lib/supabase/client";
 import type { BookRecord } from "@/types";
 import {
@@ -50,7 +51,7 @@ export default function BookDetailPage() {
     try {
       // Increment download count
       const supabase = createClientSingleton();
-      // @ts-ignore - Supabase type inference issue
+      // @ts-expect-error - Supabase type inference issue
       await supabase.rpc("increment_book_downloads", { p_book_id: bookId });
 
       // Trigger download
@@ -81,12 +82,12 @@ export default function BookDetailPage() {
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
       <div className="mb-6">
-        <a
+        <Link
           href="/library"
           className="text-sm text-ink-muted hover:text-ink transition-colors"
         >
           ← Back to Library
-        </a>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

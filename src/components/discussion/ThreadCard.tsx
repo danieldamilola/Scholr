@@ -1,37 +1,37 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { User, MessageSquare, ThumbsUp, Send, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ReplyCard } from './ReplyCard'
-import type { DiscussionThreadWithReplies } from '@/hooks/useDiscussion'
+import { useState } from "react";
+import { User, MessageSquare, Send, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ReplyCard } from "./ReplyCard";
+import type { DiscussionThreadWithReplies } from "@/hooks/useDiscussion";
 
 interface ThreadCardProps {
-  thread: DiscussionThreadWithReplies
+  thread: DiscussionThreadWithReplies;
 }
 
 export function ThreadCard({ thread }: ThreadCardProps) {
-  const [showReplyForm, setShowReplyForm] = useState(false)
-  const [replyContent, setReplyContent] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleReply = async () => {
-    if (!replyContent.trim() || isSubmitting) return
+    if (!replyContent.trim() || isSubmitting) return;
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       // This would call the createReply function from useDiscussion
       // For now, we'll need to pass it as a prop or use a different approach
-      setReplyContent('')
-      setShowReplyForm(false)
+      setReplyContent("");
+      setShowReplyForm(false);
     } catch (error) {
-      console.error('Failed to post reply:', error)
-      alert('Failed to post your reply. Please try again.')
+      console.error("Failed to post reply:", error);
+      alert("Failed to post your reply. Please try again.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="border border-border rounded-md p-4 space-y-4 hover:shadow-md transition-all duration-150">
@@ -43,7 +43,9 @@ export function ThreadCard({ thread }: ThreadCardProps) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium text-ink">{thread.user.full_name || 'Anonymous'}</span>
+            <span className="font-medium text-ink">
+              {thread.user.full_name || "Anonymous"}
+            </span>
             <span className="text-xs text-ink-muted">
               {new Date(thread.created_at).toLocaleDateString()}
             </span>
@@ -83,7 +85,11 @@ export function ThreadCard({ thread }: ThreadCardProps) {
               )}
               Reply
             </Button>
-            <Button size="sm" variant="outline" onClick={() => setShowReplyForm(false)}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setShowReplyForm(false)}
+            >
               Cancel
             </Button>
           </div>
@@ -92,11 +98,11 @@ export function ThreadCard({ thread }: ThreadCardProps) {
 
       {thread.replies.length > 0 && (
         <div className="ml-13 space-y-3">
-          {thread.replies.map((reply: any) => (
+          {thread.replies.map((reply) => (
             <ReplyCard key={reply.id} reply={reply} />
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }
